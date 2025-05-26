@@ -11,15 +11,22 @@
 <body>
     <!-- HEADER -->
     <header class="main-header">
-        <h1>EScom Explorer</h1>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="../index.html">Inicio</a></li>
-                <li><a href="categorias.html">Categorías</a></li>
-                <li><a href="favoritos.html">Favoritos</a></li>
-                <li><a href="admin.html" class="active">Gestión</a></li>
-            </ul>
-        </nav>
+        <div class="header-left">
+            <h1>EScom Explorer</h1>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="categorias.html">Categorías</a></li>
+                    <li><a href="favoritos.html">Favoritos</a></li>
+                    <li><a href="admin.html" class="active">Gestión</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="auth-section">
+            <div id="auth-container">
+                <!-- Se cargará dinámicamente -->
+            </div>
+        </div>
     </header>
 
     <!-- MAIN CONTENT -->
@@ -166,5 +173,6 @@
 
     <script src="../js/places.js"></script>
     <script src="../js/admin.js"></script>
+    <script src="../js/header-auth.js"></script>
 </body>
 </html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autenticación - EScom Explorer</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body>
+    <!-- HEADER SIMPLIFICADO -->
+    <header class="auth-header">
+        <div class="auth-header-content">
+            <h1><a href="index.html">EScom Explorer</a></h1>
+            <p>Sistema de navegación inteligente</p>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="auth-main">
+        <div class="auth-container">
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <button class="tab-button active" data-tab="login">Iniciar Sesión</button>
+                <button class="tab-button" data-tab="register">Registrarse</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-tab" class="auth-form-container active">
+                <div class="auth-form-header">
+                    <h2>¡Bienvenido de vuelta!</h2>
+                    <p>Inicia sesión para acceder a todas las funcionalidades</p>
+                </div>
+
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="login-email">Correo electrónico</label>
+                        <input type="email" id="login-email" name="email" required 
+                               placeholder="tu.correo@alumno.ipn.mx">
+                        <span class="form-icon">📧</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password">Contraseña</label>
+                        <input type="password" id="login-password" name="password" required 
+                               placeholder="Tu contraseña">
+                        <span class="form-icon">🔒</span>
+                        <button type="button" class="password-toggle" data-target="login-password">
+                            <span class="toggle-icon">👁️</span>
+                        </button>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="remember-me">
+                            <span class="checkmark"></span>
+                            Recordarme
+                        </label>
+                        <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <button type="submit" class="auth-submit-btn">
+                        <span class="btn-text">Iniciar Sesión</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+
+                    <div class="auth-divider">
+                        <span>o continúa con</span>
+                    </div>
+
+                    <div class="social-login">
+                        <button type="button" class="social-btn google-btn">
+                            <span class="social-icon">🔍</span>
+                            Google
+                        </button>
+                        <button type="button" class="social-btn microsoft-btn">
+                            <span class="social-icon">🪟</span>
+                            Microsoft
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-tab" class="auth-form-container">
+                <div class="auth-form-header">
+                    <h2>Crear cuenta nueva</h2>
+                    <p>Únete a la comunidad EScom y explora el campus</p>
+                </div>
+
+                <form id="register-form" class="auth-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="register-firstname">Nombre</label>
+                            <input type="text" id="register-firstname" name="firstname" required 
+                                   placeholder="Tu nombre">
+                            <span class="form-icon">👤</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-lastname">Apellidos</label>
+                            <input type="text" id="register-lastname" name="lastname" required 
+                                   placeholder="Tus apellidos">
+                            <span class="form-icon">👤</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-email">Correo electrónico</label>
+                        <input type="email" id="register-email" name="email" required 
+                               placeholder="tu.correo@alumno.ipn.mx">
+                        <span class="form-icon">📧</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-student-id">Boleta (opcional)</label>
+                        <input type="text" id="register-student-id" name="studentId" 
+                               placeholder="2023XXXXXXX" pattern="[0-9]{10}">
+                        <span class="form-icon">🎓</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-password">Contraseña</label>
+                        <input type="password" id="register-password" name="password" required 
+                               placeholder="Mínimo 8 caracteres">
+                        <span class="form-icon">🔒</span>
+                        <button type="button" class="password-toggle" data-target="register-password">
+                            <span class="toggle-icon">👁️</span>
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-confirm-password">Confirmar contraseña</label>
+                        <input type="password" id="register-confirm-password" name="confirmPassword" required 
+                               placeholder="Repite tu contraseña">
+                        <span class="form-icon">🔒</span>
+                        <button type="button" class="password-toggle" data-target="register-confirm-password">
+                            <span class="toggle-icon">👁️</span>
+                        </button>
+                    </div>
+
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-fill"></div>
+                        </div>
+                        <span class="strength-text">Seguridad de la contraseña</span>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="accept-terms" required>
+                            <span class="checkmark"></span>
+                            Acepto los <a href="#" class="terms-link">términos y condiciones</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="auth-submit-btn">
+                        <span class="btn-text">Crear Cuenta</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+
+                    <div class="auth-divider">
+                        <span>o regístrate con</span>
+                    </div>
+
+                    <div class="social-login">
+                        <button type="button" class="social-btn google-btn">
+                            <span class="social-icon">🔍</span>
+                            Google
+                        </button>
+                        <button type="button" class="social-btn microsoft-btn">
+                            <span class="social-icon">🪟</span>
+                            Microsoft
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Background decoration -->
+        <div class="auth-background">
+            <div class="bg-shape shape-1"></div>
+            <div class="bg-shape shape-2"></div>
+            <div class="bg-shape shape-3"></div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="auth-footer">
+        <p>&copy; 2025 IPN - Escuela Superior de Cómputo</p>
+    </footer>
+
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Procesando...</p>
+        </div>
+    </div>
+
+    <script src="../js/auth.js"></script>
+</body>
+</html>
