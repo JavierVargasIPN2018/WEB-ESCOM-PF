@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EScom Explorer – Navegación Inteligente</title>
+  <!-- Ahora las hojas de estilo vienen desde /css -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="main-header">
+    <h1>EScom Explorer</h1>
+    <nav class="main-nav">
+      <ul>
+        <!-- páginas HTML dentro de la carpeta html/ -->
+        <li><a href="../index.html" class="active">Inicio</a></li>
+        <li><a href="html/categorias.html">Categorías</a></li>
+        <li><a href="html/favoritos.html">Favoritos</a></li>
+        <li><a href="html/admin.html">Gestión</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h2>Explora EScom de manera inteligente</h2>
+        <p>Encuentra fácilmente cualquier lugar dentro de la Escuela Superior de Cómputo</p>
+      </div>
+    </section>
+
+    <!-- Explorer Grid -->
+    <div class="explorer-grid">
+      <!-- Mapa -->
+      <section class="map-section">
+        <div class="map-header">
+          <h3>Mapa Interactivo</h3>
+          <p>Vista general del campus</p>
+        </div>
+        <div class="map-container">
+          <!-- imagen desde /img -->
+          <img src="img/mapa.jpeg" alt="Mapa EScom" class="map-image"/>
+          <div class="map-overlay">
+            <div class="map-stats">
+              <div class="stat">
+                <span class="stat-number" id="total-places">0</span>
+                <span class="stat-label">Lugares</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number" id="total-categories">0</span>
+                <span class="stat-label">Categorías</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number" id="total-favorites">0</span>
+                <span class="stat-label">Favoritos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel de búsqueda -->
+      <section class="search-section">
+        <div class="search-panel">
+          <div class="search-header">
+            <h3>Buscar Ubicaciones</h3>
+            <p>Encuentra rápidamente cualquier lugar</p>
+          </div>
+          
+          <div class="search-form">
+            <div class="search-input-container">
+              <input type="text" id="search-input" placeholder="Buscar por nombre o categoría..." class="search-input" />
+              <button type="button" id="search-button" class="search-button">
+                <span>🔍</span>
+              </button>
+            </div>
+            <div class="search-filters">
+              <select id="category-filter" class="category-select">
+                <option value="">Todas las categorías</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Resultados -->
+          <div id="search-results" class="search-results">
+            <h4>Resultados de búsqueda</h4>
+            <div id="results-container" class="results-container"></div>
+          </div>
+
+          <!-- Populares -->
+          <div class="popular-section">
+            <h4>Lugares Populares</h4>
+            <div id="popular-places" class="popular-list"></div>
+          </div>
+
+          <!-- Accesos rápidos -->
+          <div class="quick-actions">
+            <h4>Accesos Rápidos</h4>
+            <div class="action-buttons">
+              <a href="html/categorias.html" class="action-btn primary">
+                <span class="btn-icon">📍</span>
+                <span>Ver Todos</span>
+              </a>
+              <a href="html/favoritos.html" class="action-btn secondary">
+                <span class="btn-icon">⭐</span>
+                <span>Mis Favoritos</span>
+              </a>
+              <a href="html/admin.html" class="action-btn tertiary">
+                <span class="btn-icon">⚙️</span>
+                <span>Gestionar Lugares</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Categorías destacadas -->
+    <section class="featured-categories">
+      <h2>Categorías Principales</h2>
+      <div id="categories-preview" class="categories-preview"></div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <p>&copy; 2025 IPN – Escuela Superior de Cómputo</p>
+  </footer>
+
+  <!-- Scripts desde /js -->
+  <script src="js/places.js"></script>
+  <script src="js/favorites.js"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>
