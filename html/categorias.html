@@ -15,6 +15,8 @@
             <ul>
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="categorias.html" class="active">Categorías</a></li>
+                <li><a href="favoritos.html">Favoritos</a></li>
+                <li><a href="admin.html">Gestión</a></li>
             </ul>
         </nav>
     </header>
@@ -22,68 +24,17 @@
     <!-- MAIN CONTENT -->
     <main class="main-content">
         <section class="categories-section">
-            <h2>Categorías de lugares</h2>
+            <h2>Lugares disponibles</h2>
             
-            <div class="categories-grid">
-                <!-- Categoría 1 -->
-                <article class="category-card">
-                    <a href="detalle.html">
-                        <div class="category-icon">
-                            <img src="../img/placeholder.jpg" alt="Icono de Aulas" class="icon-image">
-                        </div>
-                        <h3>Aulas</h3>
-                    </a>
-                </article>
+            <div id="places-grid" class="categories-grid">
+                <!-- Los lugares se cargarán dinámicamente -->
+            </div>
 
-                <!-- Categoría 2 -->
-                <article class="category-card">
-                    <a href="detalle.html">
-                        <div class="category-icon">
-                            <img src="../img/placeholder.jpg" alt="Icono de Laboratorios" class="icon-image">
-                        </div>
-                        <h3>Laboratorios</h3>
-                    </a>
-                </article>
-
-                <!-- Categoría 3 -->
-                <article class="category-card">
-                    <a href="detalle.html">
-                        <div class="category-icon">
-                            <img src="../img/placeholder.jpg" alt="Icono de Biblioteca" class="icon-image">
-                        </div>
-                        <h3>Biblioteca</h3>
-                    </a>
-                </article>
-
-                <!-- Categoría 4 -->
-                <article class="category-card">
-                    <a href="detalle.html">
-                        <div class="category-icon">
-                            <img src="../img/placeholder.jpg" alt="Icono de Cafetería" class="icon-image">
-                        </div>
-                        <h3>Cafetería</h3>
-                    </a>
-                </article>
-
-                <!-- Categoría 5 -->
-                <article class="category-card">
-                    <a href="detalle.html">
-                        <div class="category-icon">
-                            <img src="../img/placeholder.jpg" alt="Icono de Áreas Deportivas" class="icon-image">
-                        </div>
-                        <h3>Áreas Deportivas</h3>
-                    </a>
-                </article>
-
-                <!-- Categoría 6 -->
-                <article class="category-card">
-                    <a href="detalle.html">
-                        <div class="category-icon">
-                            <img src="../img/placeholder.jpg" alt="Icono de Servicios Administrativos" class="icon-image">
-                        </div>
-                        <h3>Servicios Administrativos</h3>
-                    </a>
-                </article>
+            <div id="empty-places" class="empty-state" style="display: none;">
+                <div class="empty-icon">📍</div>
+                <h3>No hay lugares disponibles</h3>
+                <p>Agrega lugares desde la sección de gestión</p>
+                <a href="admin.html" class="cta-button">Gestionar lugares</a>
             </div>
         </section>
     </main>
@@ -92,5 +43,9 @@
     <footer class="main-footer">
         <p>&copy; 2025 IPN</p>
     </footer>
+
+    <script src="../js/places.js"></script>
+    <script src="../js/favorites.js"></script>
+    <script src="../js/categorias.js"></script>
 </body>
 </html>

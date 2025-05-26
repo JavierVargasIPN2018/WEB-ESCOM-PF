@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Lugar - EScom Explorer</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/detalle.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="main-header">
+        <h1>EScom Explorer</h1>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="categorias.html">Categorías</a></li>
+                <li><a href="favoritos.html">Favoritos</a></li>
+                <li><a href="admin.html">Gestión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="breadcrumb">
+            <a href="index.html">Inicio</a> &gt; 
+            <a href="categorias.html">Categorías</a> &gt; 
+            <span id="breadcrumb-place">Cargando...</span>
+        </div>
+
+        <article class="place-detail">
+            <!-- Imagen del lugar con overlay -->
+            <div class="place-hero">
+                <div class="place-image-container">
+                    <img id="place-image" src="../img/placeholder.jpg" alt="Imagen del lugar" class="place-image">
+                </div>
+                <div class="place-hero-content">
+                    <div id="place-badge" class="place-badge">Cargando...</div>
+                    <h1 id="place-title" class="place-title">Cargando...</h1>
+                    <button id="favorite-button" class="favorite-button">
+                        <span class="star-icon">⭐</span>
+                        <span id="favorite-text">Agregar a favoritos</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Información del lugar -->
+            <div class="place-content">
+                <section class="place-info">
+                    <div class="place-description">
+                        <h2>Descripción</h2>
+                        <p id="place-description">Cargando descripción...</p>
+                        
+                        <div id="place-features" class="place-features">
+                            <!-- Las características se cargarán dinámicamente -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección de ruta -->
+                <section class="route-info">
+                    <h2>¿Cómo llegar?</h2>
+                    
+                    <div class="route-stats">
+                        <div class="route-stat">
+                            <div class="stat-icon time-icon"></div>
+                            <div class="stat-content">
+                                <span class="stat-label">Tiempo estimado</span>
+                                <span class="stat-value">5 minutos</span>
+                                <span class="stat-detail">desde la entrada principal</span>
+                            </div>
+                        </div>
+                        
+                        <div class="route-stat">
+                            <div class="stat-icon distance-icon"></div>
+                            <div class="stat-content">
+                                <span class="stat-label">Distancia</span>
+                                <span class="stat-value">200 metros</span>
+                                <span class="stat-detail">aproximadamente</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="route-directions">
+                        <h3>Referencias visuales</h3>
+                        <div id="directions-content">
+                            <p>Cargando instrucciones...</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Acciones -->
+            <div class="place-actions">
+                <a id="maps-link" href="#" class="action-button primary-action" style="display: none;">Ver en Google Maps</a>
+                <button id="share-button" class="action-button secondary-action">Compartir ubicación</button>
+            </div>
+        </article>
+
+        <!-- Lugares relacionados -->
+        <section class="related-places">
+            <h2>Lugares relacionados</h2>
+            <div id="related-grid" class="related-grid">
+                <!-- Los lugares relacionados se cargarán dinámicamente -->
+            </div>
+        </section>
+
+        <!-- Estado de error -->
+        <div id="error-state" class="error-state" style="display: none;">
+            <div class="error-icon">❌</div>
+            <h2>Lugar no encontrado</h2>
+            <p>El lugar que buscas no existe o ha sido eliminado.</p>
+            <a href="categorias.html" class="cta-button">Ver todos los lugares</a>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <p>&copy; 2025 IPN</p>
+    </footer>
+
+    <script src="../js/places.js"></script>
+    <script src="../js/favorites.js"></script>
+    <script src="../js/detalle.js"></script>
+</body>
+</html>
