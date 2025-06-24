@@ -1,5 +1,5 @@
 -- ====================================================================
--- SISTEMA DE NAVEGACIÓN DE CAMPUS - MariaDB
+-- SISTEMA DE NAVEGACIÓN DE IPN - MariaDB
 -- Versión: 1.0
 -- Fecha: 2025-06-24
 -- ====================================================================
@@ -17,7 +17,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- ====================================================================
 -- TABLA: place_types
--- Propósito: Catálogo de tipos de lugares del campus
+-- Propósito: Catálogo de tipos de lugares del IPN
 -- ====================================================================
 CREATE TABLE place_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -56,12 +56,13 @@ CREATE TABLE users (
 
 -- ====================================================================
 -- TABLA: places
--- Propósito: Lugares físicos del campus
+-- Propósito: Lugares físicos del IPN
 -- ====================================================================
 CREATE TABLE places (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     place_type_id INT NOT NULL,
+    image VARCHAR(100),
     description TEXT,
     short_code VARCHAR(10), -- Código corto para referencias rápidas (ej: "A101", "LAB3")
     capacity INT, -- Capacidad de personas
@@ -141,75 +142,45 @@ INSERT INTO place_types (name, description, icon, color) VALUES
 ('Estacionamiento', 'Áreas de estacionamiento', 'local_parking', '#FF9800'),
 ('Otro', 'Otros tipos de espacios', 'location_on', '#757575');
 
--- Insertar 10 lugares de ejemplo en el campus
-INSERT INTO places (name, place_type_id, short_code, building, floor_level, position_x, position_y, capacity, description)
+-- Insertar lugares de ejemplo en el IPN
+INSERT INTO places (name, place_type_id, position_x, position_y, short_code, description) VALUES
+("Entrada", 11, 1060, 880, "P1", "Entrada del campus"),
+("Jardineras", 13, 1060, 750, "P2", "Zona de jardineras"),
+("Comedores", 6, 1225, 910, "P3", "Área de comedores"),
+("Cafetería", 6, 1300, 930, "P4", "Cafetería principal"),
+("Letras Batiz", 13, 1160, 700, "P5", "Escultura de letras"),
+("Auditorio", 4, 1250, 700, "P6", "Auditorio general"),
+("Escaleras A", 9, 1160, 770, "P7", "Escaleras bloque A"),
+("Baños Auditorio", 7, 1190, 790, "P8", "Servicios sanitarios del auditorio"),
+("Biblioteca", 3, 1240, 840, "P9", "Biblioteca central"),
+("Papelería B", 13, 1060, 590, "P10", "Papelería edificio B"),
+("Salones provisionales", 1, 860, 580, "P11", "Salones temporales");
+
+INSERT INTO connections (
+    from_place_id, to_place_id, distance_m, travel_time_minutes,
+    connection_type, is_bidirectional, is_accessible, is_active, notes
+)
 VALUES
-('Aula 101', 1, 'A101', 'Edificio A', 1, 10.5, 20.3, 35, 'Salón de clases para materias generales'),
-('Laboratorio de Física', 2, 'LAB1', 'Edificio B', 2, 15.2, 18.7, 20, 'Laboratorio equipado para prácticas de física'),
-('Biblioteca Central', 3, 'BIB', 'Edificio C', 0, 12.0, 25.5, 100, 'Espacio de estudio y consulta de libros'),
-('Auditorio Principal', 4, 'AUD1', 'Edificio D', 0, 5.5, 30.0, 250, 'Auditorio para conferencias y eventos'),
-('Oficina de Dirección', 5, 'DIR', 'Edificio A', 1, 11.0, 21.0, 5, 'Oficina del director académico'),
-('Cafetería Estudiantil', 6, 'CAF1', 'Edificio E', 0, 8.0, 28.5, 80, 'Área de alimentos con menú variado'),
-('Baño Planta Baja A', 7, 'BANO1', 'Edificio A', 0, 10.0, 20.0, NULL, 'Servicios sanitarios planta baja'),
-('Pasillo Norte A', 8, 'PAS1', 'Edificio A', 1, 10.8, 20.5, NULL, 'Pasillo que conecta aulas del ala norte'),
-('Escalera Principal B', 9, 'ESC1', 'Edificio B', 0, 15.0, 18.5, NULL, 'Escalera principal de acceso a pisos superiores'),
-('Ascensor Edificio C', 10, 'ELEV1', 'Edificio C', 0, 12.5, 25.8, NULL, 'Ascensor accesible entre todos los pisos');
-
--- Insertar conexiones de ejemplo entre los lugares
--- Estas conexiones crearán un mapa lógico del campus
-
--- Conexiones del Aula 101 (ID: 1)
-INSERT INTO connections (from_place_id, to_place_id, distance_m, travel_time_minutes, connection_type, is_bidirectional, is_accessible) VALUES
-(1, 8, 5.0, 0.5, 'corridor', TRUE, TRUE),     -- Aula 101 → Pasillo Norte A
-(1, 5, 8.0, 1.0, 'corridor', TRUE, TRUE),     -- Aula 101 → Oficina de Dirección
-(1, 7, 25.0, 2.0, 'stairs', TRUE, FALSE);     -- Aula 101 → Baño Planta Baja A
-
--- Conexiones del Laboratorio de Física (ID: 2)
-INSERT INTO connections (from_place_id, to_place_id, distance_m, travel_time_minutes, connection_type, is_bidirectional, is_accessible) VALUES
-(2, 9, 12.0, 1.5, 'corridor', TRUE, TRUE),    -- Lab Física → Escalera Principal B
-(2, 1, 35.0, 4.0, 'corridor', TRUE, TRUE);    -- Lab Física → Aula 101
-
--- Conexiones de la Biblioteca Central (ID: 3)
-INSERT INTO connections (from_place_id, to_place_id, distance_m, travel_time_minutes, connection_type, is_bidirectional, is_accessible) VALUES
-(3, 10, 8.0, 1.0, 'corridor', TRUE, TRUE),    -- Biblioteca → Ascensor Edificio C
-(3, 6, 45.0, 5.0, 'outdoor', TRUE, TRUE),     -- Biblioteca → Cafetería
-(3, 4, 55.0, 6.0, 'outdoor', TRUE, TRUE);     -- Biblioteca → Auditorio
-
--- Conexiones del Auditorio Principal (ID: 4)
-INSERT INTO connections (from_place_id, to_place_id, distance_m, travel_time_minutes, connection_type, is_bidirectional, is_accessible) VALUES
-(4, 6, 30.0, 3.5, 'outdoor', TRUE, TRUE),     -- Auditorio → Cafetería
-(4, 3, 55.0, 6.0, 'outdoor', TRUE, TRUE);     -- Auditorio → Biblioteca
-
--- Conexiones de la Oficina de Dirección (ID: 5)
-INSERT INTO connections (from_place_id, to_place_id, distance_m, travel_time_minutes, connection_type, is_bidirectional, is_accessible) VALUES
-(5, 1, 8.0, 1.0, 'corridor', TRUE, TRUE),     -- Oficina Dirección → Aula 101
-(5, 8, 6.0, 0.8, 'corridor', TRUE, TRUE);     -- Oficina Dirección → Pasillo Norte A
-
--- Conexiones de la Cafetería (ID: 6)
-INSERT INTO connections (from_place_id, to_place_id, distance_m, travel_time_minutes, connection_type, is_bidirectional, is_accessible) VALUES
-(6, 4, 30.0, 3.5, 'outdoor', TRUE, TRUE),     -- Cafetería → Auditorio
-(6, 3, 45.0, 5.0, 'outdoor', TRUE, TRUE);     -- Cafetería → Biblioteca
-
--- Conexiones del Baño Planta Baja A (ID: 7)
-INSERT INTO connections (from_place_id, to_place_id, distance_m, travel_time_minutes, connection_type, is_bidirectional, is_accessible) VALUES
-(7, 8, 15.0, 1.8, 'stairs', TRUE, FALSE),     -- Baño → Pasillo Norte A
-(7, 1, 25.0, 2.0, 'stairs', TRUE, FALSE);     -- Baño → Aula 101
-
--- Conexiones del Pasillo Norte A (ID: 8)
-INSERT INTO connections (from_place_id, to_place_id, distance_m, travel_time_minutes, connection_type, is_bidirectional, is_accessible) VALUES
-(8, 1, 5.0, 0.5, 'corridor', TRUE, TRUE),     -- Pasillo → Aula 101
-(8, 5, 6.0, 0.8, 'corridor', TRUE, TRUE),     -- Pasillo → Oficina Dirección
-(8, 7, 15.0, 1.8, 'stairs', TRUE, FALSE);     -- Pasillo → Baño
-
--- Conexiones de la Escalera Principal B (ID: 9)
-INSERT INTO connections (from_place_id, to_place_id, distance_m, travel_time_minutes, connection_type, is_bidirectional, is_accessible) VALUES
-(9, 2, 12.0, 1.5, 'stairs', TRUE, FALSE),     -- Escalera → Lab Física
-(9, 10, 50.0, 5.5, 'outdoor', TRUE, TRUE);    -- Escalera → Ascensor (conexión entre edificios)
-
--- Conexiones del Ascensor Edificio C (ID: 10)
-INSERT INTO connections (from_place_id, to_place_id, distance_m, travel_time_minutes, connection_type, is_bidirectional, is_accessible) VALUES
-(10, 3, 8.0, 1.0, 'elevator', TRUE, TRUE),    -- Ascensor → Biblioteca
-(10, 9, 50.0, 5.5, 'outdoor', TRUE, TRUE);    -- Ascensor → Escalera (conexión entre edificios)
+-- Entrada (1) → Jardineras (2)
+(1, 2, 130.00, 2.17, 'corridor', TRUE, TRUE, TRUE, NULL),
+-- Jardineras (2) → Letras Batiz (5)
+(2, 5, 101.98, 1.70, 'corridor', TRUE, TRUE, TRUE, NULL),
+-- Letras Batiz (5) → Salones provisionales (11)
+(5, 11, 189.74, 3.16, 'corridor', TRUE, TRUE, TRUE, NULL),
+-- Jardineras (2) → Auditorio (6)
+(2, 6, 206.16, 3.44, 'corridor', TRUE, TRUE, TRUE, NULL),
+-- Jardineras (2) → Escaleras A (7)
+(2, 7, 83.00, 1.38, 'corridor', TRUE, TRUE, TRUE, NULL),
+-- Jardineras (2) → Baños Auditorio (8)
+(2, 8, 69.46, 1.16, 'corridor', TRUE, TRUE, TRUE, NULL),
+-- Jardineras (2) → Biblioteca (9)
+(2, 9, 190.26, 3.17, 'corridor', TRUE, TRUE, TRUE, NULL),
+-- Jardineras (2) → Papelería B (10)
+(2, 10, 160.00, 2.67, 'corridor', TRUE, TRUE, TRUE, NULL),
+-- Entrada (1) → Comedores (3)
+(1, 3, 170.00, 2.83, 'corridor', TRUE, TRUE, TRUE, NULL),
+-- Comedores (3) → Cafetería (4)
+(3, 4, 79.06, 1.32, 'corridor', TRUE, TRUE, TRUE, NULL);
 
 -- Verificar las conexiones creadas
 SELECT 

@@ -1,8 +1,16 @@
 <?php
 
+require 'config/environment.php';
+
 class Database
 {
+  // private $host = getenv('DB_HOST') ?: 'db';
+  // private $port = getenv('DB_PORT') ?: '3306';
+  // private $db_name = getenv('DB_DATABASE') ?: 'testdb';
+  // private $username = getenv('DB_USERNAME') ?: 'user';
+  // private $password = getenv('DB_PASSWORD') ?: 'userpass';
   private $host = 'db';
+  private $port = '3306';
   private $db_name = 'testdb';
   private $username = 'user';
   private $password = 'userpass';

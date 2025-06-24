@@ -1,5 +1,4 @@
 <?php
-// index.php - Simple Router
 
 session_start();
 
@@ -28,8 +27,11 @@ spl_autoload_register(function ($class) {
 $authMiddleware = new AuthMiddleware();
 
 $authController = new AuthController();
-$placeTypesController = new PlaceTypesController();
+
+$placeTypesController = new PlaceTypes();
 $placeController = new PlaceController();
+$connectionController = new ConnectionController();
+
 
 // Get the current URL path
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -48,46 +50,63 @@ function normalizeRoute($uri)
   return $uri ?: '/';
 }
 
-// Function to extract route parameters
-function extractRouteParams($pattern, $uri)
-{
-  $pattern = str_replace('*', '([^/]+)', $pattern);
-  $pattern = '#^' . $pattern . '$#';
-
-  if (preg_match($pattern, $uri, $matches)) {
-    array_shift($matches); // Remove full match
-    return $matches;
-  }
-
-  return false;
-}
-
 // Normalize the current route
 $normalizedUri = normalizeRoute($requestUri);
+
 
 // Apply security headers
 $authMiddleware->securityHeaders();
 
+if (preg_match('#^/lugares/(\d+)$#', $normalizedUri, $matches)) {
+  $authMiddleware->csrfProtection();
+
+  $id = (int)$matches[1]; // Capturamos el ID
+
+  $placeController->showPlaceDetail([
+    'placeId' => $id,
+    'connectionController' => $connectionController,
+    'currentPage' => "/lugares"
+  ]);
+  return;
+}
+
 // Simple routing
-switch (true) {
-  case $normalizedUri === '/':
+switch ($normalizedUri) {
+  case '/':
+    // Redirect to appropriate dashboard
+    // if ($authController->isLoggedIn()) {
+    //   if ($authController->isAdmin()) {
+    //     header('Location: /admin/dashboard');
+    //   } else {
+    //     header('Location: /dashboard');
+    //   }
+    // } else {
+    //   header('Location: /login');
+    // }
+
+
     $currentPage = "/";
+
     $favoritesCount = 0;
     $categoryCount = 0;
 
     $placeTypes = $placeTypesController->getAllPlaceTypes();
+
     include 'views/home/index.php';
     break;
 
-  case $normalizedUri === '/favoritos':
+  case '/favoritos':
     $currentPage = "/favoritos";
+
     $favoritesCount = 0;
     $categoryCount = $placeTypesController->countPlaceTypes();
+
     $placeTypes = $placeTypesController->getAllPlaceTypes();
+
     include 'views/favorites/index.php';
     break;
 
-  case $normalizedUri === '/login':
+  case '/login':
     $authMiddleware->redirectIfAuthenticated();
     $authMiddleware->loginRateLimit();
     $authMiddleware->csrfProtection();
@@ -95,11 +114,12 @@ switch (true) {
     if ($requestMethod === 'POST') {
       $authController->login();
     } else {
+
       $authController->showLogin();
     }
     break;
 
-  case $normalizedUri === '/register':
+  case '/register':
     $authMiddleware->redirectIfAuthenticated();
     $authMiddleware->csrfProtection();
 
@@ -110,56 +130,35 @@ switch (true) {
     }
     break;
 
-  case $normalizedUri === '/logout':
+  case '/logout':
     $authMiddleware->requireAuth();
     $authController->logout();
     break;
 
-  case $normalizedUri === '/lugares':
+  case '/lugares':
     $authMiddleware->csrfProtection();
 
     if ($requestMethod === 'POST') {
       $placeController->places([
         'currentPage' => "/lugares",
-        'authController' => $authController
+        'authController' => $authController,
+        'connectionController' => $connectionController
       ]);
     } else {
       $placeController->showPlaces([
         'currentPage' => "/lugares",
-        'authController' => $authController
+        'authController' => $authController,
+        'connectionController' => $connectionController
       ]);
     }
     break;
 
-  case ($params = extractRouteParams('/lugares/*', $normalizedUri)) !== false:
-    // Ruta para detalle de lugar: /lugares/{id}
-    $placeId = $params[0];
-
-    if ($requestMethod === 'GET') {
-      $placeController->showPlaceDetail([
-        'placeId' => $placeId,
-        'currentPage' => "/lugares",
-        'authController' => $authController
-      ]);
-    } else {
-      // Manejar otros métodos HTTP si es necesario (PUT, DELETE, etc.)
-      header('HTTP/1.1 405 Method Not Allowed');
-      echo json_encode(['error' => 'Método no permitido']);
-    }
-    break;
-
-  case preg_match('#^/places\?id=(\d+)$#', $requestUri, $matches):
-    // Compatibilidad con la URL antigua /places?id=123
-    $placeId = $matches[1];
-    header("Location: /lugares/$placeId", true, 301); // Redirect permanente
-    break;
-
-  case $normalizedUri === '/dashboard':
+  case '/dashboard':
     $authMiddleware->requireAuth();
     include 'views/dashboard/user.php';
     break;
 
-  case $normalizedUri === '/api/user':
+  case '/api/user':
     $authMiddleware->requireAuth();
     header('Content-Type: application/json');
     echo json_encode($authController->getCurrentUser());

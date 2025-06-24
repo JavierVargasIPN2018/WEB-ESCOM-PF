@@ -1,3 +1,7 @@
+<?
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -8,6 +12,7 @@
   <link rel="stylesheet" href="styles/globals.css">
   <link rel="stylesheet" href="styles/responsive.css">
   <link rel="stylesheet" href="styles/home.css">
+  <link rel="stylesheet" href="styles/auth.css">
 </head>
 
 <body>
@@ -98,15 +103,15 @@
           <div class="quick-actions">
             <h4>Accesos Rápidos</h4>
             <div class="action-buttons">
-              <a href="categorias.html" class="action-btn primary">
+              <a href="/lugares" class="action-btn primary">
                 <span class="btn-icon">📍</span>
                 <span>Ver Todos los Lugares</span>
               </a>
-              <a href="favoritos.html" class="action-btn secondary">
+              <a href="/favoritos" class="action-btn secondary">
                 <span class="btn-icon">⭐</span>
                 <span>Mis Favoritos</span>
               </a>
-              <a href="admin.html" class="action-btn tertiary">
+              <a href="/dasboard" class="action-btn tertiary">
                 <span class="btn-icon">⚙️</span>
                 <span>Gestionar Lugares</span>
               </a>

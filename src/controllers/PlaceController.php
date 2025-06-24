@@ -2,6 +2,8 @@
 
 require_once 'models/Place.php';
 
+require_once 'lib/utils.php';
+
 const PLACES_ROUTE = 'views/places/index.php';
 
 class PlaceController
@@ -84,7 +86,7 @@ class PlaceController
   {
     $placeId = $params['placeId'];
     $currentPage = $params['currentPage'];
-    $authController = $params['authController'];
+    $connectionController = $params['connectionController'];
 
     if (!is_numeric($placeId)) {
       header('HTTP/1.1 404 Not Found');
@@ -94,9 +96,7 @@ class PlaceController
 
     try {
       // Obtener el lugar con su tipo
-      $place = $this->placeModel->findById($placeId);
-
-      echo json_encode($place);
+      $place = $this->placeModel->getPlaceWithType($placeId);
 
       if (!$place) {
         header('HTTP/1.1 404 Not Found');
@@ -104,19 +104,10 @@ class PlaceController
         return;
       }
 
-      $connections = $this->placeModel->getPlaceConnections($placeId);
+      $path = $connectionController->getPath($placeId);
+      $connections = $connectionController->getConnectionsForPath($path);
 
-
-      $nearbyPlaces = $this->placeModel->getNearbyPlaces($place['position_x'], $place['position_y'], 50.0);
-
-
-      $viewData = [
-        'place' => $place,
-        'connections' => $connections,
-        'nearbyPlaces' => $nearbyPlaces,
-        'currentPage' => $currentPage,
-        'authController' => $authController
-      ];
+      echo json_encode($connections);
 
       include 'views/places/detail.php';
     } catch (Exception $e) {

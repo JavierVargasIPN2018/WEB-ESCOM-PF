@@ -1,201 +1,137 @@
+<?
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= htmlspecialchars($place['name']) ?> - EScom Explorer</title>
-  <link rel="stylesheet" href="/styles/globals.css">
-  <link rel="stylesheet" href="/styles/responsive.css">
-  <link rel="stylesheet" href="/styles/place-detail.css">
+  <title>Detalle de Lugar - EScom Explorer</title>
+  <link rel="stylesheet" href="../styles/globals.css">
+  <link rel="stylesheet" href="../styles/responsive.css">
+  <link rel="stylesheet" href="../styles/detail.css">
 </head>
 
 <body>
   <!-- HEADER -->
-  <?php require "components/layouts/header.php" ?>
+  <? require 'components/layouts/header.php' ?>
 
   <!-- MAIN CONTENT -->
   <main class="main-content">
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb">
-      <a href="/">Inicio</a>
-      <span class="breadcrumb-separator">›</span>
-      <a href="/lugares">Lugares</a>
-      <span class="breadcrumb-separator">›</span>
-      <span class="current"><?= htmlspecialchars($place['name']) ?></span>
-    </nav>
+    <div class="breadcrumb">
+      <a href="/">Inicio</a> &gt;
+      <a href="/lugares">Lugares</a> &gt;
+      <span id="breadcrumb-place"><?= $place["name"] ?></span>
+    </div>
 
-    <!-- Place Header -->
-    <section class="place-header">
+    <article class="place-detail">
+      <!-- Imagen del lugar con overlay -->
       <div class="place-hero">
-        <div class="place-icon" style="background-color: <?= htmlspecialchars($place['type_color']) ?>">
-          <img src="/public/images/icons/<?= htmlspecialchars($place['type_icon']) ?>.svg"
-            alt="Icono de <?= htmlspecialchars($place['type_name']) ?>"
-            class="icon-image">
+        <div class="place-image-container">
+          <img id="place-image" src="../../public/images/placeholder.webp" alt="Imagen del lugar" class="place-image">
         </div>
-        <div class="place-info">
-          <h1><?= htmlspecialchars($place['name']) ?></h1>
-          <div class="place-meta">
-            <span class="place-type"><?= htmlspecialchars($place['type_name']) ?></span>
-            <?php if ($place['short_code']): ?>
-              <span class="place-code"><?= htmlspecialchars($place['short_code']) ?></span>
-            <?php endif; ?>
-            <?php if ($place['building']): ?>
-              <span class="place-building"><?= htmlspecialchars($place['building']) ?></span>
-            <?php endif; ?>
-          </div>
-          <div class="place-actions">
-            <button class="favorite-btn" data-place-id="<?= $place['id'] ?>">
-              <span class="favorite-icon">☆</span>
-              Agregar a favoritos
-            </button>
-            <button class="share-btn">
-              <span class="share-icon">📤</span>
-              Compartir
-            </button>
-          </div>
+        <div class="place-hero-content">
+          <div id="place-badge" class="place-badge"><?= $place["type_name"] ?></div>
+          <h1 id="place-title" class="place-title"><?= $place["name"] ?></h1>
+          <button id="favorite-button" class="favorite-button">
+            <span class="star-icon">⭐</span>
+            <span id="favorite-text">Agregar a favoritos</span>
+          </button>
         </div>
+      </div>
+
+      <!-- Información del lugar -->
+      <div class="place-content">
+        <section class="place-info">
+          <div class="place-description">
+            <h2>Descripción</h2>
+            <p id="place-description"><?= $place["description"] ?></p>
+
+            <div id="place-features" class="place-features">
+              <!-- Las características se cargarán dinámicamente -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Sección de ruta -->
+        <section class="route-info">
+          <h2>¿Cómo llegar?</h2>
+
+          <div class="route-stats">
+            <div class="route-stat">
+              <div class="stat-icon time-icon"></div>
+              <div class="stat-content">
+                <span class="stat-label">Tiempo estimado</span>
+                <span class="stat-value">5 minutos</span>
+                <span class="stat-detail">desde la entrada principal</span>
+              </div>
+            </div>
+
+            <div class="route-stat">
+              <div class="stat-icon distance-icon"></div>
+              <div class="stat-content">
+                <span class="stat-label">Distancia</span>
+                <span class="stat-value">200 metros</span>
+                <span class="stat-detail">aproximadamente</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="route-directions">
+            <h3>Referencias visuales</h3>
+            <div id="directions-content">
+              <ul>
+                <? foreach ($connections as $path): ?>
+                  <li>
+                    <p>Camina <?= $path["distance_m"] ?> metros, desde <?= $path["from_name"] ?> hasta <?= $path["to_name"] ?></p>
+                  </li>
+                <? endforeach ?>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+    </article>
+
+    <!-- Lugares relacionados -->
+    <section class="related-places">
+      <h2>Lugares relacionados</h2>
+      <div id="related-grid" class="related-grid">
+        <? if (count($nearbyPlaces) === 0) : ?>
+          <p class="no-related">No hay lugares relacionados disponibles.</p>
+        <? else : ?>
+          <? foreach ($nearbyPlaces as $nearbyPlace): ?>
+            <a href="/lugares/<?= $nearbyPlace["id"] ?>" class="related-card">
+              <img src="../../public/images/placeholder.webp" alt="<?= $nearbyPlace["name"] ?>" class="related-image">
+              <div class="related-info">
+                <h3><?= $nearbyPlace["name"] ?></h3>
+                <span class="related-category"><?= $nearbyPlace["type_name"] ?></span>
+              </div>
+            </a>
+          <? endforeach ?>
+        <? endif ?>
       </div>
     </section>
 
-    <!-- Place Details -->
-    <section class="place-details">
-      <div class="details-grid">
-        <!-- Information Card -->
-        <div class="detail-card">
-          <h2>Información</h2>
-          <div class="info-grid">
-            <?php if ($place['description']): ?>
-              <div class="info-item">
-                <span class="info-label">Descripción:</span>
-                <span class="info-value"><?= htmlspecialchars($place['description']) ?></span>
-              </div>
-            <?php endif; ?>
-
-            <?php if ($place['capacity']): ?>
-              <div class="info-item">
-                <span class="info-label">Capacidad:</span>
-                <span class="info-value"><?= $place['capacity'] ?> personas</span>
-              </div>
-            <?php endif; ?>
-
-            <div class="info-item">
-              <span class="info-label">Piso:</span>
-              <span class="info-value">
-                <?php
-                $floorLevel = $place['floor_level'];
-                if ($floorLevel == 0) {
-                  echo 'Planta baja';
-                } elseif ($floorLevel == 1) {
-                  echo '1er piso';
-                } elseif ($floorLevel == 2) {
-                  echo '2do piso';
-                } elseif ($floorLevel == 3) {
-                  echo '3er piso';
-                } else {
-                  echo $floorLevel . 'º piso';
-                }
-                ?>
-              </span>
-            </div>
-
-            <div class="info-item">
-              <span class="info-label">Accesible:</span>
-              <span class="info-value accessibility-<?= $place['is_accessible'] ? 'yes' : 'no' ?>">
-                <?= $place['is_accessible'] ? '✓ Sí' : '✗ No' ?>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Connections Card -->
-        <?php if (!empty($connections)): ?>
-          <div class="detail-card">
-            <h2>Conexiones directas</h2>
-            <div class="connections-list">
-              <?php foreach ($connections as $connection): ?>
-                <div class="connection-item">
-                  <div class="connection-place">
-                    <div class="connection-icon" style="background-color: <?= htmlspecialchars($connection['to_place_color']) ?>">
-                      <img src="/public/images/icons/<?= htmlspecialchars($connection['to_place_icon']) ?>.svg"
-                        alt="<?= htmlspecialchars($connection['to_place_type']) ?>"
-                        class="icon-image">
-                    </div>
-                    <div class="connection-info">
-                      <h4>
-                        <a href="/lugares/<?= $connection['to_place_id'] ?>">
-                          <?= htmlspecialchars($connection['to_place_name']) ?>
-                        </a>
-                      </h4>
-                      <span class="connection-type"><?= htmlspecialchars($connection['to_place_type']) ?></span>
-                      <?php if ($connection['to_place_building']): ?>
-                        <span class="connection-building"><?= htmlspecialchars($connection['to_place_building']) ?></span>
-                      <?php endif; ?>
-                    </div>
-                  </div>
-                  <div class="connection-details">
-                    <span class="connection-distance"><?= number_format($connection['distance_m'], 1) ?>m</span>
-                    <?php if ($connection['travel_time_minutes']): ?>
-                      <span class="connection-time"><?= number_format($connection['travel_time_minutes'], 1) ?> min</span>
-                    <?php endif; ?>
-                    <span class="connection-method"><?= ucfirst($connection['connection_type']) ?></span>
-                  </div>
-                </div>
-              <?php endforeach; ?>
-            </div>
-          </div>
-        <?php endif; ?>
-
-        <!-- Nearby Places Card -->
-        <?php if (!empty($nearbyPlaces) && count($nearbyPlaces) > 1): ?>
-          <div class="detail-card">
-            <h2>Lugares cercanos</h2>
-            <div class="nearby-grid">
-              <?php foreach (array_slice($nearbyPlaces, 1, 6) as $nearby): ?>
-                <div class="nearby-item">
-                  <a href="/lugares/<?= $nearby['id'] ?>">
-                    <div class="nearby-icon" style="background-color: <?= htmlspecialchars($nearby['type_color']) ?>">
-                      <img src="/public/images/icons/<?= htmlspecialchars($nearby['type_icon']) ?>.svg"
-                        alt="<?= htmlspecialchars($nearby['type_name']) ?>"
-                        class="icon-image">
-                    </div>
-                    <div class="nearby-info">
-                      <h4><?= htmlspecialchars($nearby['name']) ?></h4>
-                      <span class="nearby-distance"><?= number_format($nearby['distance'], 1) ?>m</span>
-                    </div>
-                  </a>
-                </div>
-              <?php endforeach; ?>
-            </div>
-          </div>
-        <?php endif; ?>
-      </div>
-    </section>
-
-    <!-- Map Section (if coordinates available) -->
-    <?php if ($place['position_x'] && $place['position_y']): ?>
-      <section class="place-map">
-        <h2>Ubicación</h2>
-        <div class="map-container">
-          <div class="map-placeholder">
-            <div class="map-marker" style="left: <?= ($place['position_x'] / 50 * 100) ?>%; top: <?= ($place['position_y'] / 50 * 100) ?>%;">
-              <div class="marker-icon" style="background-color: <?= htmlspecialchars($place['type_color']) ?>">
-                📍
-              </div>
-            </div>
-            <p>Coordenadas: (<?= number_format($place['position_x'], 2) ?>, <?= number_format($place['position_y'], 2) ?>)</p>
-          </div>
-        </div>
-      </section>
-    <?php endif; ?>
+    <!-- Estado de error -->
+    <div id="error-state" class="error-state" style="display: none;">
+      <div class="error-icon">❌</div>
+      <h2>Lugar no encontrado</h2>
+      <p>El lugar que buscas no existe o ha sido eliminado.</p>
+      <a href="/lugares" class="cta-button">Ver todos los lugares</a>
+    </div>
   </main>
 
   <!-- FOOTER -->
-  <?php require "components/layouts/footer.php" ?>
+  <? require 'components/layouts/footer.php' ?>
 
-  <script src="/js/favorites.js"></script>
-  <script src="/js/place-detail.js"></script>
-  <script src="/js/header-auth.js"></script>
+  <script src="../js/places.js"></script>
+  <script src="../js/favorites.js"></script>
+  <script src="../js/detalle.js"></script>
+  <script src="../js/header-auth.js"></script>
 </body>
 
 </html>
