@@ -8,7 +8,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EScom Explorer - Navegación Inteligente</title>
+  <title>Batiz Explorer - Navegación Inteligente</title>
   <link rel="stylesheet" href="styles/globals.css">
   <link rel="stylesheet" href="styles/responsive.css">
   <link rel="stylesheet" href="styles/home.css">
@@ -24,7 +24,7 @@
     <!-- Hero Section -->
     <section class="hero-section">
       <div class="hero-content">
-        <h2>Explora EScom de manera inteligente</h2>
+        <h2>Explora Batiz de manera inteligente</h2>
         <p>Encuentra fácilmente cualquier lugar dentro de la Escuela Superior de Cómputo</p>
       </div>
     </section>
@@ -38,7 +38,7 @@
           <p>Vista general del campus</p>
         </div>
         <div class="map-container">
-          <img src="public/images/placeholder.webp" alt="Mapa de ubicaciones EScom" class="map-image">
+          <img src="public/images/placeholder.webp" alt="Mapa de ubicaciones Batiz" class="map-image">
           <div class="map-overlay">
             <div class="map-stats">
               <div class="stat">

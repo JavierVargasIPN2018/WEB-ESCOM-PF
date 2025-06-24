@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión de Lugares - EScom Explorer</title>
+  <title>Gestión de Lugares - Batiz Explorer</title>
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="../css/responsive.css">
   <link rel="stylesheet" href="../css/admin.css">
@@ -14,7 +14,7 @@
   <!-- HEADER -->
   <header class="main-header">
     <div class="header-left">
-      <h1>EScom Explorer</h1>
+      <h1>Batiz Explorer</h1>
       <nav class="main-nav">
         <ul>
           <li><a href="index.html">Inicio</a></li>

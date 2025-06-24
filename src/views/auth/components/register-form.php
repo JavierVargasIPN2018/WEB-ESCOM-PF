@@ -1,7 +1,7 @@
 <div class="auth-form-container active">
   <div class="auth-form-header">
     <h2>Crear cuenta nueva</h2>
-    <p>Únete a la comunidad EScom y explora el campus</p>
+    <p>Únete a la comunidad Batiz y explora el campus</p>
   </div>
 
   <form method="POST" action="/register" id="register-form" class="auth-form">

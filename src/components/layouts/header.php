@@ -10,7 +10,7 @@ $isLoggedIn = $currentUser !== null;
 
 <header class="main-header">
   <div class="header-left">
-    <h1>EScom Explorer</h1>
+    <h1>Batiz Explorer</h1>
 
     <nav class="main-nav">
       <ul>
