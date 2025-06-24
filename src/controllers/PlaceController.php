@@ -107,7 +107,8 @@ class PlaceController
       $path = $connectionController->getPath($placeId);
       $connections = $connectionController->getConnectionsForPath($path);
 
-      echo json_encode($connections);
+      $relatedPlaces = $this->getRelatedPlaces($place["id"]);
+
 
       include 'views/places/detail.php';
     } catch (Exception $e) {
@@ -115,6 +116,13 @@ class PlaceController
       header('HTTP/1.1 500 Internal Server Error');
       include 'views/errors/500.php';
     }
+  }
+
+  public function getRelatedPlaces($placeId, $limit = 3)
+  {
+    $relatedPlaces = $this->placeModel->getRelatedPlaces($placeId, $limit);
+
+    return $relatedPlaces;
   }
 
 

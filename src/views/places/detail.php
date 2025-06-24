@@ -1,6 +1,12 @@
 <?
 
+$time = 0;
+$distance = 0;
 
+foreach ($connections as $path) {
+  $time += $path["travel_time_minutes"];
+  $distance += $path["distance_m"];
+}
 ?>
 
 <!DOCTYPE html>
@@ -65,7 +71,7 @@
               <div class="stat-icon time-icon"></div>
               <div class="stat-content">
                 <span class="stat-label">Tiempo estimado</span>
-                <span class="stat-value">5 minutos</span>
+                <span class="stat-value"><?= $time ?> minutos</span>
                 <span class="stat-detail">desde la entrada principal</span>
               </div>
             </div>
@@ -74,7 +80,7 @@
               <div class="stat-icon distance-icon"></div>
               <div class="stat-content">
                 <span class="stat-label">Distancia</span>
-                <span class="stat-value">200 metros</span>
+                <span class="stat-value"><?= $distance  ?> metros</span>
                 <span class="stat-detail">aproximadamente</span>
               </div>
             </div>
@@ -83,13 +89,20 @@
           <div class="route-directions">
             <h3>Referencias visuales</h3>
             <div id="directions-content">
-              <ul>
-                <? foreach ($connections as $path): ?>
+              <ol class="directions-list">
+                <? if (!$connections || count($connections) < 1): ?>
+                  <p>No hay instrucciones de llegada disponibles.</p>
+                <? endif ?>
+
+                <? foreach ($connections as $i => $path): ?>
                   <li>
-                    <p>Camina <?= $path["distance_m"] ?> metros, desde <?= $path["from_name"] ?> hasta <?= $path["to_name"] ?></p>
+                    <span class="direction-number"><?= $i + 1 ?></span>
+                    <span class="direction-text">
+                      Camina <?= $path["distance_m"] ?> metros, desde <?= $path["from_name"] ?> hasta <?= $path["to_name"] ?>
+                    </span>
                   </li>
                 <? endforeach ?>
-              </ul>
+              </ol>
             </div>
           </div>
         </section>
@@ -100,15 +113,15 @@
     <section class="related-places">
       <h2>Lugares relacionados</h2>
       <div id="related-grid" class="related-grid">
-        <? if (count($nearbyPlaces) === 0) : ?>
+        <? if (count($relatedPlaces) === 0) : ?>
           <p class="no-related">No hay lugares relacionados disponibles.</p>
         <? else : ?>
-          <? foreach ($nearbyPlaces as $nearbyPlace): ?>
+          <? foreach ($relatedPlaces as $nearbyPlace): ?>
             <a href="/lugares/<?= $nearbyPlace["id"] ?>" class="related-card">
               <img src="../../public/images/placeholder.webp" alt="<?= $nearbyPlace["name"] ?>" class="related-image">
               <div class="related-info">
                 <h3><?= $nearbyPlace["name"] ?></h3>
-                <span class="related-category"><?= $nearbyPlace["type_name"] ?></span>
+                <span class="related-category"><?= $nearbyPlace["type"]["name"] ?></span>
               </div>
             </a>
           <? endforeach ?>
@@ -127,11 +140,6 @@
 
   <!-- FOOTER -->
   <? require 'components/layouts/footer.php' ?>
-
-  <script src="../js/places.js"></script>
-  <script src="../js/favorites.js"></script>
-  <script src="../js/detalle.js"></script>
-  <script src="../js/header-auth.js"></script>
 </body>
 
 </html>

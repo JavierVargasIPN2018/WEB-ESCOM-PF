@@ -145,55 +145,43 @@ class Place
     return $this->db->fetchOne($sql, [$placeId]);
   }
 
-  /**
-   * Get connections from a place
-   */
-  public function getPlaceConnections($placeId)
+  public function getRelatedPlaces($placeId, $limit = 3)
   {
+    $place = $this->findById($placeId);
+    if (!$place) {
+      return [];
+    }
+
+    $typeId = $place['place_type_id'];
+
+    // 2. Buscar lugares del mismo tipo, excluyendo el actual
     $sql = "
-            SELECT 
-                c.*,
-                p_to.name as to_place_name,
-                p_to.short_code as to_place_code,
-                p_to.building as to_place_building,
-                p_to.floor_level as to_place_floor,
-                pt_to.name as to_place_type,
-                pt_to.icon as to_place_icon,
-                pt_to.color as to_place_color
-            FROM connections c
-            INNER JOIN places p_to ON c.to_place_id = p_to.id
-            INNER JOIN place_types pt_to ON p_to.place_type_id = pt_to.id
-            WHERE c.from_place_id = ? 
-                AND c.is_active = 1 
-                AND p_to.is_active = 1
-            ORDER BY c.distance_m ASC
-        ";
+      SELECT 
+          p.*, 
+          pt.name AS type_name, 
+          pt.icon AS type_icon, 
+          pt.color AS type_color
+      FROM places p
+      JOIN place_types pt ON p.place_type_id = pt.id
+      WHERE p.is_active = 1
+        AND p.place_type_id = ?
+        AND p.id != ?
+      ORDER BY p.name ASC
+      LIMIT ?
+  ";
 
-    return $this->db->fetchAll($sql, [$placeId]);
-  }
+    $rows = $this->db->fetchAll($sql, [$typeId, $placeId, $limit]);
 
-  /**
-   * Get nearby places based on coordinates
-   */
-  public function getNearbyPlaces($x, $y, $radius = 50.0)
-  {
-    $sql = "
-            SELECT 
-                p.*,
-                pt.name as type_name,
-                pt.icon as type_icon,
-                pt.color as type_color,
-                SQRT(POWER(p.position_x - ?, 2) + POWER(p.position_y - ?, 2)) as distance
-            FROM places p
-            INNER JOIN place_types pt ON p.place_type_id = pt.id
-            WHERE p.is_active = 1
-                AND SQRT(POWER(p.position_x - ?, 2) + POWER(p.position_y - ?, 2)) <= ?
-                AND SQRT(POWER(p.position_x - ?, 2) + POWER(p.position_y - ?, 2)) > 0
-            ORDER BY distance ASC
-            LIMIT 10
-        ";
+    foreach ($rows as &$row) {
+      $row['type'] = [
+        'name' => $row['type_name'],
+        'icon' => $row['type_icon'],
+        'color' => $row['type_color']
+      ];
+      unset($row['type_name'], $row['type_icon'], $row['type_color']);
+    }
 
-    return $this->db->fetchAll($sql, [$x, $y, $x, $y, $radius, $x, $y]);
+    return $rows;
   }
 
   /**
