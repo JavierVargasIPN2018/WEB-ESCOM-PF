@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteBase /
+
+# Debug: Log what's happening (optional)
+# RewriteLog logs/rewrite.log
+# RewriteLogLevel 3
+
+# Route all requests to index.php, preserving the original URI
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L,E=ORIGINAL_URI:/$1]
