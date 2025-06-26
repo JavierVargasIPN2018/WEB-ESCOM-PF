@@ -20,5 +20,7 @@ services:
       MARIADB_DATABASE: testdb
       MARIADB_USER: user
       MARIADB_PASSWORD: userpass
+    volumes:
+      - ./scripts/db.sql:/docker-entrypoint-initdb.d/db.sql
     ports:
       - "3306:3306"
