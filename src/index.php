@@ -31,7 +31,7 @@ $authController = new AuthController();
 $placeTypesController = new PlaceTypes();
 $placeController = new PlaceController();
 $connectionController = new ConnectionController();
-
+$favoritePlacesController = new FavoritePlacesController();
 
 // Get the current URL path
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -65,6 +65,7 @@ if (preg_match('#^/lugares/(\d+)$#', $normalizedUri, $matches)) {
   $placeController->showPlaceDetail([
     'placeId' => $id,
     'connectionController' => $connectionController,
+    'favoritePlacesController' => $favoritePlacesController,
     'currentPage' => "/lugares"
   ]);
   return;
@@ -72,6 +73,7 @@ if (preg_match('#^/lugares/(\d+)$#', $normalizedUri, $matches)) {
 
 // Simple routing
 switch ($normalizedUri) {
+  // views
   case '/':
     // Redirect to appropriate dashboard
     // if ($authController->isLoggedIn()) {
@@ -93,17 +95,6 @@ switch ($normalizedUri) {
     $placeTypes = $placeTypesController->getAllPlaceTypes();
 
     include 'views/home/index.php';
-    break;
-
-  case '/favoritos':
-    $currentPage = "/favoritos";
-
-    $favoritesCount = 0;
-    $categoryCount = $placeTypesController->countPlaceTypes();
-
-    $placeTypes = $placeTypesController->getAllPlaceTypes();
-
-    include 'views/favorites/index.php';
     break;
 
   case '/login':
@@ -136,21 +127,30 @@ switch ($normalizedUri) {
     break;
 
   case '/lugares':
+    $placeController->showPlaces([
+      'currentPage' => "/lugares",
+      'favoritePlacesController' => $favoritePlacesController,
+      'connectionController' => $connectionController
+    ]);
+
+    break;
+
+  case '/favoritos':
+    $authMiddleware->requireAuth();
     $authMiddleware->csrfProtection();
 
-    if ($requestMethod === 'POST') {
-      $placeController->places([
-        'currentPage' => "/lugares",
-        'authController' => $authController,
-        'connectionController' => $connectionController
-      ]);
-    } else {
-      $placeController->showPlaces([
-        'currentPage' => "/lugares",
-        'authController' => $authController,
-        'connectionController' => $connectionController
-      ]);
-    }
+    $currentPage = "/favoritos";
+
+    $categoryCount = $placeTypesController->countPlaceTypes();
+
+    $placeTypes = $placeTypesController->getAllPlaceTypes();
+
+    $favoritePlacesController->showFavorites([
+      'currentPage' => "/favoritos",
+      'categoryCount' => $categoryCount,
+      'placeTypes' => $placeTypes
+    ]);
+
     break;
 
   case '/dashboard':
@@ -158,7 +158,44 @@ switch ($normalizedUri) {
     include 'views/dashboard/user.php';
     break;
 
+  // actions
+  case '/toggle-favorite':
+    $authMiddleware->requireAuth();
+    $authMiddleware->csrfProtection();
+
+    if ($requestMethod === 'POST') {
+      $favoritePlacesController->toggleFavorite();
+      $redirectUrl = $_POST['redirect_url'] ?? '/lugares';
+
+      header('Location:' . $redirectUrl);
+    } else {
+      header('Location: /lugares');
+      exit;
+    }
+    break;
+
+  // api
+
   case '/api/user':
+    $authMiddleware->requireAuth();
+    header('Content-Type: application/json');
+    echo json_encode($authController->getCurrentUser());
+    break;
+
+  case '/api/places':
+    $authMiddleware->csrfProtection();
+    $authMiddleware->requireAdmin();
+
+    if ($requestMethod === 'POST') {
+      $placeController->places([
+        'authController' => $authController,
+        'connectionController' => $connectionController
+      ]);
+    }
+
+    break;
+
+  case '/api/toggle-favorite':
     $authMiddleware->requireAuth();
     header('Content-Type: application/json');
     echo json_encode($authController->getCurrentUser());

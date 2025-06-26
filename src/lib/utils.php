@@ -7,6 +7,21 @@ function renderView($viewPath, $data = [])
   include 'components/layouts/footer.php';
 }
 
+function renderAttributes($attributes = [])
+{
+  $attrs = '';
+  foreach ($attributes as $key => $value) {
+    if ($value !== null && $value !== false) {
+      $attrs .= ' ' . htmlspecialchars($key) . '="' . htmlspecialchars($value) . '"';
+    }
+  }
+  return $attrs;
+}
+
+function mergeAttributes($defaults, $custom = [])
+{
+  return array_merge($defaults, $custom);
+}
 
 function dijkstra($graph, $start, $end)
 {

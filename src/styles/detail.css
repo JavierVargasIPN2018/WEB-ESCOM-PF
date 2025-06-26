@@ -73,56 +73,6 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Botón de favoritos en hero - ACTUALIZADO */
-.favorite-button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  color: var(--text-light);
-  padding: 0.8rem 1.5rem;
-  border-radius: 30px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: var(--transition);
-  margin-top: 1rem;
-  box-shadow: var(--shadow-lg);
-}
-
-.favorite-button:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.4);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-xl);
-}
-
-.favorite-button.active {
-  background: linear-gradient(135deg, rgba(0, 194, 255, 0.3), rgba(167, 199, 255, 0.3));
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.favorite-button.active:hover {
-  background: linear-gradient(135deg, rgba(0, 194, 255, 0.4), rgba(167, 199, 255, 0.4));
-  border-color: var(--primary-light);
-}
-
-.star-icon {
-  font-size: 1.2rem;
-  transition: transform 0.3s ease;
-}
-
-.favorite-button:hover .star-icon {
-  transform: scale(1.2);
-}
-
-.favorite-button.active .star-icon {
-  color: #ffd700;
-  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
-}
-
 /* Content layout */
 .place-content {
   display: grid;
@@ -188,7 +138,11 @@
 }
 
 .feature:hover {
-  background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+  background: linear-gradient(
+    135deg,
+    var(--primary-light),
+    var(--accent-light)
+  );
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }

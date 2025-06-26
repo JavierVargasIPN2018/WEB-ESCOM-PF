@@ -22,6 +22,10 @@ class PlaceController
     $places = $this->placeModel->getAllPlaces();
     $success = $_GET['success'] ?? '';
 
+    $userFavoritePlaces = $favoritePlacesController->getFavorites();
+
+    $favPlaceIds = array_column($userFavoritePlaces, 'place_id');
+
     $errors = $errors ?? [];
     $old = $old ?? [];
 
@@ -87,6 +91,7 @@ class PlaceController
     $placeId = $params['placeId'];
     $currentPage = $params['currentPage'];
     $connectionController = $params['connectionController'];
+    $favoritePlacesController = $params['favoritePlacesController'];
 
     if (!is_numeric($placeId)) {
       header('HTTP/1.1 404 Not Found');
@@ -109,6 +114,11 @@ class PlaceController
 
       $relatedPlaces = $this->getRelatedPlaces($place["id"]);
 
+      $userFavoritePlaces = $favoritePlacesController->getFavorites();
+      $favPlaceIds = array_column($userFavoritePlaces, 'place_id');
+
+      $placeId = $place['id'];
+      $isFavorite = in_array($placeId, $favPlaceIds);
 
       include 'views/places/detail.php';
     } catch (Exception $e) {

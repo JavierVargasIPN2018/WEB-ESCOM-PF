@@ -1,3 +1,8 @@
+<?php
+require_once 'components/icons/favorite-icon.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -7,6 +12,8 @@
   <title>Lugares - Batiz Explorer</title>
   <link rel="stylesheet" href="styles/globals.css">
   <link rel="stylesheet" href="styles/responsive.css">
+  <link rel="stylesheet" href="styles/favorites.css">
+  <link rel="stylesheet" href="styles/places-card.css">
 </head>
 
 <body>
@@ -24,9 +31,9 @@
             <a href="/lugares/<?= $place["id"] ?>">
               <div class="category-icon">
                 <?php if (!empty($dish['image']) && file_exists($dish['image'])): ?>
-                  <img src="<?= htmlspecialchars($dish['image']); ?>"
-                    alt="<?= htmlspecialchars($dish['name']); ?>"
-                    class="w-full h-full object-cover">
+                  <img
+                    src="<?= htmlspecialchars($dish['image']); ?>"
+                    alt="<?= htmlspecialchars($dish['name']); ?>">
                 <?php else: ?>
                   <img src="/public/images/placeholder.webp" alt="Icono de <?= $place["name"] ?>" class="icon-image">
                 <?php endif; ?>
@@ -36,7 +43,18 @@
               <p class="category-type"><?= $place["type"]["name"] ?></p>
             </a>
             <div class="card-favorite">
-              ${createFavoriteButton(place.id, "favorite-star card-star")}
+              <?php $isFavorite = in_array($place['id'], $favPlaceIds); ?>
+
+              <form method="POST" action="/toggle-favorite" class="favorite-form">
+                <input type="hidden" name="place_id" value="<?= $place["id"] ?>">
+                <input type="hidden" name="redirect_url" value="<?= $_SERVER['REQUEST_URI'] ?>">
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+
+                <button type="submit" class="favorite-star card-star <?= $isFavorite ? 'active' : '' ?>"
+                  title="<?= $isFavorite ? 'Eliminar de favoritos' : 'Agregar a favoritos' ?>">
+                  <?= favoriteIcon() ?>
+                </button>
+              </form>
             </div>
           </article>
         <?php endforeach ?>
@@ -54,10 +72,6 @@
   <!-- FOOTER -->
   <? require "components/layouts/footer.php" ?>
 
-  <!-- <script src="../js/places.js"></script> -->
-  <script src="../js/favorites.js"></script>
-  <!-- <script src="../js/categorias.js"></script> -->
-  <script src="../js/header-auth.js"></script>
 </body>
 
 </html>

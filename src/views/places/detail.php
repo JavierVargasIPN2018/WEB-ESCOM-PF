@@ -1,4 +1,5 @@
 <?
+require_once 'components/favorite-button.php';
 
 $time = 0;
 $distance = 0;
@@ -19,6 +20,7 @@ foreach ($connections as $path) {
   <link rel="stylesheet" href="../styles/globals.css">
   <link rel="stylesheet" href="../styles/responsive.css">
   <link rel="stylesheet" href="../styles/detail.css">
+  <link rel="stylesheet" href="../styles/favorite-button.css">
 </head>
 
 <body>
@@ -42,10 +44,7 @@ foreach ($connections as $path) {
         <div class="place-hero-content">
           <div id="place-badge" class="place-badge"><?= $place["type_name"] ?></div>
           <h1 id="place-title" class="place-title"><?= $place["name"] ?></h1>
-          <button id="favorite-button" class="favorite-button">
-            <span class="star-icon">⭐</span>
-            <span id="favorite-text">Agregar a favoritos</span>
-          </button>
+          <?= favoriteButton($isFavorite, $placeId) ?>
         </div>
       </div>
 

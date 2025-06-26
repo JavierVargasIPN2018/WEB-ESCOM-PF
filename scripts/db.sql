@@ -123,6 +123,28 @@ CREATE TABLE connections (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ====================================================================
+-- TABLA: favorite_places
+-- Propósito: Lugares favoritos marcados por los usuarios
+-- ====================================================================
+CREATE TABLE favorite_places (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    place_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Claves foráneas
+    CONSTRAINT fk_fav_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_fav_place FOREIGN KEY (place_id) REFERENCES places(id) ON DELETE CASCADE,
+    
+    -- Restricción para evitar duplicados
+    CONSTRAINT uc_user_place UNIQUE (user_id, place_id),
+    
+    -- Índices
+    INDEX idx_user (user_id),
+    INDEX idx_place (place_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ====================================================================
 -- DATOS INICIALES
 -- ====================================================================
 

@@ -1,3 +1,7 @@
+<?php
+require_once 'components/favorite-button.php';
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -8,6 +12,7 @@
   <link rel="stylesheet" href="styles/globals.css">
   <link rel="stylesheet" href="styles/responsive.css">
   <link rel="stylesheet" href="styles/favorites.css">
+  <link rel="stylesheet" href="styles/favorite-button.css">
 </head>
 
 <body>
@@ -55,36 +60,50 @@
         </div>
       </div>
 
-      <div id="favorites-container" class="favorites-grid">
-        <!-- Los favoritos se cargarán dinámicamente -->
-      </div>
-
-      <div id="empty-favorites" class="empty-state" style="display: none;">
-        <div class="empty-illustration">
-          <div class="empty-icon">⭐</div>
-          <div class="empty-stars">
-            <span>✨</span>
-            <span>⭐</span>
-            <span>✨</span>
+      <? if ($favoritesCount < 1): ?>
+        <div id="empty-favorites" class="empty-state" style="display: none;">
+          <div class="empty-illustration">
+            <div class="empty-icon">⭐</div>
+            <div class="empty-stars">
+              <span>✨</span>
+              <span>⭐</span>
+              <span>✨</span>
+            </div>
           </div>
+          <h3>¡Aún no tienes favoritos!</h3>
+          <p>Explora lugares increíbles y guarda tus favoritos para acceder rápidamente a ellos</p>
+          <a href="categorias.html" class="cta-button">
+            <span>Explorar lugares</span>
+            <span class="button-icon">→</span>
+          </a>
         </div>
-        <h3>¡Aún no tienes favoritos!</h3>
-        <p>Explora lugares increíbles y guarda tus favoritos para acceder rápidamente a ellos</p>
-        <a href="categorias.html" class="cta-button">
-          <span>Explorar lugares</span>
-          <span class="button-icon">→</span>
-        </a>
-      </div>
+      <? else : ?>
+        <div id="favorites-container" class="favorites-grid">
+          <? foreach ($favorites as $favorite): ?>
+            <div class="favorite-card">
+              <div class="favorite-image">
+                <div class="favorite-badge"> <?= $favorite["type_name"] ?> </div>
+              </div>
+              <div class="favorite-content">
+                <div class="favorite-header">
+                  <h3 class="favorite-title"> <?= $favorite["place_name"] ?> </h3>
+                  <?= favoriteButton(true, $favorite['place_id']) ?>
+                </div>
+                <p class="favorite-description"> <?= $favorite["place_description"] ?> </p>
+                <div class="favorite-actions">
+                  <a href="/lugares/<?= $favorite["place_id"] ?>" class="action-link view-details">Ver detalles</a>
+                </div>
+              </div>
+            </div>
+          <? endforeach ?>
+        </div>
+      <? endif ?>
+
     </section>
   </main>
 
   <!-- FOOTER -->
   <? require "components/layouts/footer.php" ?>
-
-  <script src="../js/places.js"></script>
-  <script src="../js/favorites.js"></script>
-  <script src="../js/favorites-page.js"></script>
-  <script src="../js/header-auth.js"></script>
 </body>
 
 </html>
