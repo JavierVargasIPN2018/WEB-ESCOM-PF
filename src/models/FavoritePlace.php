@@ -96,7 +96,7 @@ class FavoritePlace
   /**
    * Count a user's favorite place
    */
-  public function countFavoritePlace($userId)
+  public function countFavoritePlaces($userId)
   {
     $sql = "SELECT COUNT(id) as count FROM favorite_places WHERE user_id = ?";
     return $this->db->fetchOne($sql, [$userId])["count"];

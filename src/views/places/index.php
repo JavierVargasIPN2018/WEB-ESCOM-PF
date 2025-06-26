@@ -27,13 +27,18 @@ require_once 'components/icons/favorite-icon.php';
 
       <div id="places-grid" class="categories-grid">
         <?php foreach ($places as $place) : ?>
+          <?php
+          $image = trim($place['image'] ?? '');
+          ?>
+
           <article class="category-card">
             <a href="/lugares/<?= $place["id"] ?>">
               <div class="category-icon">
-                <?php if (!empty($dish['image']) && file_exists($dish['image'])): ?>
+                <?php if (!empty($image)): ?>
                   <img
-                    src="<?= htmlspecialchars($dish['image']); ?>"
-                    alt="<?= htmlspecialchars($dish['name']); ?>">
+                    src="<?= htmlspecialchars("/" . $image); ?>"
+                    alt="<?= htmlspecialchars($place['name']); ?>"
+                    class="icon-image">
                 <?php else: ?>
                   <img src="/public/images/placeholder.webp" alt="Icono de <?= $place["name"] ?>" class="icon-image">
                 <?php endif; ?>
@@ -64,7 +69,6 @@ require_once 'components/icons/favorite-icon.php';
         <div class="empty-icon">📍</div>
         <h3>No hay lugares disponibles</h3>
         <p>Agrega lugares desde la sección de gestión</p>
-        <a href="admin.html" class="cta-button">Gestionar lugares</a>
       </div>
     </section>
   </main>

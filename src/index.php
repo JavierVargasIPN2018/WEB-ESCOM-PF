@@ -31,7 +31,7 @@ $authController = new AuthController();
 $placeTypesController = new PlaceTypes();
 $placeController = new PlaceController();
 $connectionController = new ConnectionController();
-$favoritePlacesController = new FavoritePlacesController();
+$favoritePlacesController = new FavoritePlacesController($authController);
 
 // Get the current URL path
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -64,6 +64,7 @@ if (preg_match('#^/lugares/(\d+)$#', $normalizedUri, $matches)) {
 
   $placeController->showPlaceDetail([
     'placeId' => $id,
+    'authController' => $authController,
     'connectionController' => $connectionController,
     'favoritePlacesController' => $favoritePlacesController,
     'currentPage' => "/lugares"
@@ -75,24 +76,19 @@ if (preg_match('#^/lugares/(\d+)$#', $normalizedUri, $matches)) {
 switch ($normalizedUri) {
   // views
   case '/':
-    // Redirect to appropriate dashboard
-    // if ($authController->isLoggedIn()) {
-    //   if ($authController->isAdmin()) {
-    //     header('Location: /admin/dashboard');
-    //   } else {
-    //     header('Location: /dashboard');
-    //   }
-    // } else {
-    //   header('Location: /login');
-    // }
 
+    $placeType = $_GET['type'] ?? '';
 
     $currentPage = "/";
 
-    $favoritesCount = 0;
-    $categoryCount = 0;
+    $countFavoritePlaces = $favoritePlacesController->countFavoritePlaces();
+
+    $places = $placeController->searchPlaces();
+    $countPlaces = count($places);
+
 
     $placeTypes = $placeTypesController->getAllPlaceTypes();
+    $countPlaceTypes = count($placeTypes);
 
     include 'views/home/index.php';
     break;
@@ -129,6 +125,7 @@ switch ($normalizedUri) {
   case '/lugares':
     $placeController->showPlaces([
       'currentPage' => "/lugares",
+      'authController' => $authController,
       'favoritePlacesController' => $favoritePlacesController,
       'connectionController' => $connectionController
     ]);
@@ -147,16 +144,17 @@ switch ($normalizedUri) {
 
     $favoritePlacesController->showFavorites([
       'currentPage' => "/favoritos",
+      'authController' => $authController,
       'categoryCount' => $categoryCount,
       'placeTypes' => $placeTypes
     ]);
 
     break;
 
-  case '/dashboard':
-    $authMiddleware->requireAuth();
-    include 'views/dashboard/user.php';
-    break;
+  // case '/dashboard':
+  //   $authMiddleware->requireAuth();
+  //   include 'views/dashboard/user.php';
+  //   break;
 
   // actions
   case '/toggle-favorite':

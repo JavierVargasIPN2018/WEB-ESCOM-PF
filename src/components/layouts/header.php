@@ -17,7 +17,6 @@ $isLoggedIn = $currentUser !== null;
         <li><a href="/" class="<?= $currentPage === "/" ? 'active' : '' ?>">Inicio</a></li>
         <li><a href="/lugares" class="<?= $currentPage === "/lugares" ? 'active' : '' ?>">Lugares</a></li>
         <li><a href="/favoritos" class="<?= $currentPage === "/favoritos" ? 'active' : '' ?>">Favoritos</a></li>
-        <li><a href="/dashboard" class="<?= $currentPage === "/dashboard" ? 'active' : '' ?>">Gestión</a></li>
       </ul>
     </nav>
   </div>

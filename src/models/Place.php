@@ -155,8 +155,7 @@ class Place
     $typeId = $place['place_type_id'];
 
     // 2. Buscar lugares del mismo tipo, excluyendo el actual
-    $sql = "
-      SELECT 
+    $sql = "SELECT 
           p.*, 
           pt.name AS type_name, 
           pt.icon AS type_icon, 
@@ -185,35 +184,42 @@ class Place
   }
 
   /**
-   * Search places by name or description
+   * Search places
    */
-  public function searchPlaces($searchTerm)
+  public function searchPlaces($q = '', $type = '')
   {
-    $sql = "
-            SELECT 
-                p.*, 
-                pt.name AS type_name, 
-                pt.icon AS type_icon, 
-                pt.color AS type_color
-            FROM places p
-            JOIN place_types pt ON p.place_type_id = pt.id
-            WHERE p.is_active = 1
-                AND (
-                    p.name LIKE ? 
-                    OR p.description LIKE ? 
-                    OR p.short_code LIKE ?
-                    OR p.building LIKE ?
-                    OR pt.name LIKE ?
-                )
-            ORDER BY p.name ASC
-        ";
+    $sql = "SELECT 
+              p.*, 
+              pt.name AS type_name, 
+              pt.icon AS type_icon, 
+              pt.color AS type_color
+          FROM places p
+          JOIN place_types pt ON p.place_type_id = pt.id
+          WHERE p.is_active = 1";
 
-    $searchPattern = "%$searchTerm%";
-    $params = array_fill(0, 5, $searchPattern);
+    $params = [];
+
+    if ($type > 0) {
+      $sql .= " AND p.place_type_id = ?";
+      $params[] = $type;
+    }
+
+    if (!empty($q)) {
+      $sql .= " AND (
+                p.name LIKE ?
+                OR p.short_code LIKE ?
+                OR p.building LIKE ?
+                OR pt.name LIKE ?
+              )";
+      $searchPattern = "%$q%";
+      $params = array_merge($params, array_fill(0, 4, $searchPattern));
+    }
+
+    $sql .= " ORDER BY p.name ASC";
 
     $rows = $this->db->fetchAll($sql, $params);
 
-    // Format the results
+    // Formatear resultados
     foreach ($rows as &$row) {
       $row['type'] = [
         'name' => $row['type_name'],
@@ -224,5 +230,15 @@ class Place
     }
 
     return $rows;
+  }
+
+
+  /**
+   * Count places
+   */
+  public function countPlaces()
+  {
+    $sql = "SELECT COUNT(id) as count FROM places";
+    return $this->db->fetchOne($sql)["count"];
   }
 }

@@ -88,10 +88,7 @@ class PlaceController
 
   public function showPlaceDetail($params)
   {
-    $placeId = $params['placeId'];
-    $currentPage = $params['currentPage'];
-    $connectionController = $params['connectionController'];
-    $favoritePlacesController = $params['favoritePlacesController'];
+    extract($params);
 
     if (!is_numeric($placeId)) {
       header('HTTP/1.1 404 Not Found');
@@ -134,7 +131,18 @@ class PlaceController
 
     return $relatedPlaces;
   }
+  public function searchPlaces()
+  {
+    $searchTerm = trim($_GET['q'] ?? '');
+    $placetypeId = intval($_GET['type'] ?? 0);
 
+    return $this->placeModel->searchPlaces($searchTerm, $placetypeId);
+  }
+
+  public function countPlaces()
+  {
+    return $this->placeModel->countPlaces();
+  }
 
   private function validatePlace($name)
   {

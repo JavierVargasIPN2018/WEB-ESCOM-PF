@@ -44,7 +44,7 @@ require_once 'components/favorite-button.php';
       </div>
 
       <!-- Filtros -->
-      <div class="favorites-filters">
+      <!-- <div class="favorites-filters">
         <div class="filter-group">
           <label for="category-filter">Filtrar por categoría:</label>
           <select id="category-filter" class="filter-select">
@@ -58,7 +58,7 @@ require_once 'components/favorite-button.php';
           <label for="search-filter">Buscar:</label>
           <input type="text" id="search-filter" placeholder="Buscar en favoritos..." class="filter-input">
         </div>
-      </div>
+      </div> -->
 
       <? if ($favoritesCount < 1): ?>
         <div id="empty-favorites" class="empty-state" style="display: none;">

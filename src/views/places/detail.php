@@ -39,7 +39,17 @@ foreach ($connections as $path) {
       <!-- Imagen del lugar con overlay -->
       <div class="place-hero">
         <div class="place-image-container">
-          <img id="place-image" src="../../public/images/placeholder.webp" alt="Imagen del lugar" class="place-image">
+          <?php $image = trim($place['image'] ?? ''); ?>
+
+          <?php if (!empty($image)): ?>
+            <img
+              src="<?= htmlspecialchars("/" . $image); ?>"
+              alt="<?= htmlspecialchars($place['name']); ?>"
+              class="place-image">
+          <?php else: ?>
+            <img id="place-image" src="../../public/images/placeholder.webp" alt="Imagen del lugar" class="place-image">
+          <?php endif; ?>
+
         </div>
         <div class="place-hero-content">
           <div id="place-badge" class="place-badge"><?= $place["type_name"] ?></div>

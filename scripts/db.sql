@@ -9,8 +9,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 -- Eliminar tablas existentes si existen (en orden correcto para evitar conflictos FK)
 DROP TABLE IF EXISTS connections;
-DROP TABLE IF EXISTS places;
+DROP TABLE IF EXISTS favorite_places;
 DROP TABLE IF EXISTS place_types;
+DROP TABLE IF EXISTS places;
 DROP TABLE IF EXISTS users;
 
 SET FOREIGN_KEY_CHECKS = 1;
@@ -149,60 +150,101 @@ CREATE TABLE favorite_places (
 -- ====================================================================
 
 -- Insertar tipos de lugares predefinidos
-INSERT INTO place_types (name, description, icon, color) VALUES
-('Salón', 'Aulas y salones de clase', 'classroom', '#4A90E2'),
-('Laboratorio', 'Laboratorios de práctica y investigación', 'science', '#7ED321'),
-('Biblioteca', 'Espacios de estudio y consulta', 'library_books', '#F5A623'),
-('Auditorio', 'Espacios para eventos y conferencias', 'event', '#D0021B'),
-('Oficina', 'Oficinas administrativas y académicas', 'business', '#9013FE'),
-('Cafetería', 'Espacios de alimentación', 'restaurant', '#FF6D00'),
-('Baño', 'Servicios sanitarios', 'wc', '#607D8B'),
-('Pasillo', 'Pasillos y corredores', 'more_horiz', '#9E9E9E'),
-('Escalera', 'Escaleras y accesos verticales', 'stairs', '#795548'),
-('Ascensor', 'Elevadores', 'elevator', '#3F51B5'),
-('Entrada', 'Entradas y salidas del edificio', 'exit_to_app', '#4CAF50'),
-('Estacionamiento', 'Áreas de estacionamiento', 'local_parking', '#FF9800'),
-('Otro', 'Otros tipos de espacios', 'location_on', '#757575');
+INSERT INTO place_types (id, name, description, icon, color) VALUES
+(1,'Salón', 'Aulas y salones de clase', 'classroom', '#4A90E2'),
+(2,'Laboratorio', 'Laboratorios de práctica y investigación', 'science', '#7ED321'),
+(3,'Biblioteca', 'Espacios de estudio y consulta', 'library_books', '#F5A623'),
+(4,'Auditorio', 'Espacios para eventos y conferencias', 'event', '#D0021B'),
+(5,'Oficina', 'Oficinas administrativas y académicas', 'business', '#9013FE'),
+(6,'Cafetería', 'Espacios de alimentación', 'restaurant', '#FF6D00'),
+(7,'Baño', 'Servicios sanitarios', 'wc', '#607D8B'),
+(8,'Pasillo', 'Pasillos y corredores', 'more_horiz', '#9E9E9E'),
+(9,'Escalera', 'Escaleras y accesos verticales', 'stairs', '#795548'),
+(10,'Ascensor', 'Elevadores', 'elevator', '#3F51B5'),
+(11,'Entrada', 'Entradas y salidas del edificio', 'exit_to_app', '#4CAF50'),
+(12,'Estacionamiento', 'Áreas de estacionamiento', 'local_parking', '#FF9800'),
+(13,'Otro', 'Otros tipos de espacios', 'location_on', '#757575');
 
 -- Insertar lugares de ejemplo en el IPN
-INSERT INTO places (name, place_type_id, position_x, position_y, short_code, description) VALUES
-("Entrada", 11, 1060, 880, "P1", "Entrada del campus"),
-("Jardineras", 13, 1060, 750, "P2", "Zona de jardineras"),
-("Comedores", 6, 1225, 910, "P3", "Área de comedores"),
-("Cafetería", 6, 1300, 930, "P4", "Cafetería principal"),
-("Letras Batiz", 13, 1160, 700, "P5", "Escultura de letras"),
-("Auditorio", 4, 1250, 700, "P6", "Auditorio general"),
-("Escaleras A", 9, 1160, 770, "P7", "Escaleras bloque A"),
-("Baños Auditorio", 7, 1190, 790, "P8", "Servicios sanitarios del auditorio"),
-("Biblioteca", 3, 1240, 840, "P9", "Biblioteca central"),
-("Papelería B", 13, 1060, 590, "P10", "Papelería edificio B"),
-("Salones provisionales", 1, 860, 580, "P11", "Salones temporales");
+INSERT INTO places (id, name, place_type_id, image, floor_level, position_x, position_y, short_code, description) VALUES
+(1, 'Entrada principal', 11, 'uploads/entrada_principal.webp', 0, 360, 150, "P1", 'Es el acceso principal al CECyT 9 "Juan de Dios Bátiz". Desde este punto, los visitantes, alumnos y personal ingresan al plantel. También sirve como referencia para calcular distancias hacia otros puntos de interés dentro de la escuela.'),
+(2, 'Jardineras centrales', 13,'uploads/jardineras_centrales.webp', 0, 360, 400, "P2", 'Espacio abierto compuesto por tres jardineras ubicadas en el corazón del plantel. Estas áreas verdes están pensadas para el descanso, convivencia entre alumnos y el embellecimiento del entorno escolar.'),
+(3, 'Comedores', 6, 'uploads/comedores.webp', 0, 460, 520, "P3", "Área de comedores"),
+(4, 'Cafetería', 6, 'uploads/cafeteria.webp', 0, 510, 535, "P4", "Cafetería principal"),
+(5, 'Letras Batiz', 13, 'uploads/letras_batiz.webp', 0, 420, 400, "P5", "Escultura de letras"),
+(6, 'Auditorio', 4, 'uploads/auditorio.webp', 0, 480, 400, "P6", "Auditorio general"),
+(7, 'Escaleras A', 9, 'uploads/escaleras_edificio_a.webp', 0, 410, null, "P7", "Escaleras bloque A"),
+(8, 'Baños Auditorio', 7, 'uploads/banos_auditorio.webp', 0, 440, 440, "P8", "Servicios sanitarios del auditorio"),
+(9, 'Biblioteca', 3, 'uploads/biblioteca.webp', 0, 460, 480, "P9", "Biblioteca central"),
+(10, 'Papelería B', 13, 'uploads/papeleria_edificio_b.webp', 0, 330, 330, "P10", "Papelería edificio B"),
+(11, 'Salones provisionales', 1, 'uploads/salones_provisionales.webp', 0, 220, 230, "P11", "Salones temporales"),
+(12, 'Cancha de fútbol sala', 13, null, 0, 140, 290, 'CFS','Espacio deportivo techado destinado a la práctica de fútbol rápido, con medidas reglamentarias y superficie sintética.'),
+(13, 'Canchas de básquet', 13, null, 0, null, null, 'CBA', 'Dos canchas al aire libre con superficie de concreto y aros reglamentarios para la práctica de baloncesto.'),
+(14, 'Club de atletismo', 5, null, 0, null, null, 'CAT','Área destinada al almacenamiento de materiales y equipamiento para la práctica de atletismo, así como espacio para reuniones del club deportivo.'),
+(15, 'Prefectura', 5, null, 0, null, null, 'PRE','Oficina encargada de mantener el orden y disciplina escolar, así como de gestionar permisos y reportes de los estudiantes.'),
+(16, 'Escaleras primer piso A', 9, null, 0,  null, null, 'EPA', 'Escalinatas que conectan la planta baja con el primer nivel del edificio A, permitiendo el acceso a salones y áreas administrativas.'),
+(17, 'Academia de matemáticas', 5,  null, 0, null, null, 'AMA','Salón destinado a reuniones y planeación académica del departamento de matemáticas, equipado con recursos didácticos.'),
+(18, 'Academia de área social', 5, null, 0, null, null, 'AAS', 'Espacio de trabajo para los profesores del área social, donde se realizan planeaciones y actividades académicas.'),
+(19, 'Servicio médico', 5, null, 0, 500, 500, 'SME', 'Área equipada para brindar primeros auxilios y atención médica básica a estudiantes y personal del plantel.'),
+(20, 'Salón de máquinas y herramientas', 2, null, 0, null, null, 'SMH', 'Taller equipado con maquinaria, tornos y herramientas para las prácticas de las carreras de mecatrónica y automatización.'),
+(21, 'Papelería Ciberbatiz', 13, null, 0, null, null, 'PCB', 'Establecimiento que ofrece servicios de papelería, fotocopiado e impresión, ubicado en el área de Ciberbatiz.'),
+(22, 'Salón de usos múltiples', 1, null, 0, null, null, 'SUM', 'Aula versátil equipada para diversas actividades académicas, eventos o reuniones especiales.'),
+(23, 'Ciberbatiz', 13, null, 0, 500, 500, 'CIB', 'Espacio al aire libre con palapas y mesas para estudio individual o en grupo, con acceso a red inalámbrica.'),
+(24, 'Baño escaleras edificio B', 7, null, 0, null, null, 'BEB', 'Servicios sanitarios ubicados cerca de las escaleras del edificio B, para uso de estudiantes y personal.'),
+(25, 'Salones 100', 1, null, 0, null, null, 'S100', 'Conjunto de aulas estándar para clases teóricas, numeradas en la serie 100.'),
+(26, 'Salones de dibujo técnico', 1, null, 0, null, null, 'SDT', 'Aulas especializadas equipadas con mesas de dibujo técnico para las asignaturas de diseño y arquitectura.'),
+(27, 'Laboratorio de biología', 2, null, 0, null, null, 'LBI', 'Espacio equipado con microscopios, especímenes y materiales para prácticas de biología y ciencias afines.'),
+(28, 'Salones Samsung', 2, null, 0, null, null, 'SSA', 'Laboratorio de tecnología equipado con dispositivos donados por Samsung para prácticas especializadas.'),
+(29, 'Laboratorio de sistemas digitales', 2, null, 0, null, null, 'LSD', 'Espacio con equipos de cómputo y herramientas para el desarrollo de proyectos de sistemas digitales.'),
+(30, 'Cubículos de sistemas digitales', 5, null, 0, null, null, 'CSD', 'Oficinas para profesores del área de sistemas digitales, equipadas para preparación de clases y asesorías.');
 
-INSERT INTO connections (
-    from_place_id, to_place_id, distance_m, travel_time_minutes,
-    connection_type, is_bidirectional, is_accessible, is_active, notes
-)
-VALUES
+INSERT INTO connections (from_place_id, to_place_id, distance_m, travel_time_minutes, connection_type, is_bidirectional) VALUES
 -- Entrada (1) → Jardineras (2)
-(1, 2, 130.00, 2.17, 'corridor', TRUE, TRUE, TRUE, NULL),
--- Jardineras (2) → Letras Batiz (5)
-(2, 5, 101.98, 1.70, 'corridor', TRUE, TRUE, TRUE, NULL),
--- Letras Batiz (5) → Salones provisionales (11)
-(5, 11, 189.74, 3.16, 'corridor', TRUE, TRUE, TRUE, NULL),
--- Jardineras (2) → Auditorio (6)
-(2, 6, 206.16, 3.44, 'corridor', TRUE, TRUE, TRUE, NULL),
--- Jardineras (2) → Escaleras A (7)
-(2, 7, 83.00, 1.38, 'corridor', TRUE, TRUE, TRUE, NULL),
--- Jardineras (2) → Baños Auditorio (8)
-(2, 8, 69.46, 1.16, 'corridor', TRUE, TRUE, TRUE, NULL),
--- Jardineras (2) → Biblioteca (9)
-(2, 9, 190.26, 3.17, 'corridor', TRUE, TRUE, TRUE, NULL),
--- Jardineras (2) → Papelería B (10)
-(2, 10, 160.00, 2.67, 'corridor', TRUE, TRUE, TRUE, NULL),
--- Entrada (1) → Comedores (3)
-(1, 3, 170.00, 2.83, 'corridor', TRUE, TRUE, TRUE, NULL),
--- Comedores (3) → Cafetería (4)
-(3, 4, 79.06, 1.32, 'corridor', TRUE, TRUE, TRUE, NULL);
+-- (1, 2, 130.00, 2.17, 'corridor', TRUE, TRUE, TRUE, NULL),
+(1, 2, 100, 1.67, 'corridor', TRUE),    
+(1, 3, 100, 1.67, 'corridor', TRUE),    
+(1, 5, 150, 2.50, 'outdoor', TRUE),     
+(1, 15, 250, 4.17, 'corridor', TRUE),
+
+(2, 5, 50, 0.83, 'outdoor', TRUE),      
+(2, 6, 150, 2.50, 'corridor', TRUE),    
+(2, 7, 50, 0.83, 'corridor', TRUE),     
+(2, 8, 80, 1.33, 'corridor', TRUE),     
+(2, 9, 200, 3.33, 'corridor', TRUE),    
+(2, 10, 60, 1.00, 'corridor', TRUE),    
+(2, 11, 140, 2.33, 'corridor', TRUE),   
+(2, 12, 300, 5.00, 'outdoor', TRUE),    
+(2, 15, 150, 2.50, 'corridor', TRUE),   
+(2, 21, 250, 4.17, 'corridor', TRUE), 
+
+(10, 11, 80, 1.33, 'corridor', TRUE),   
+(11, 12, 100, 1.67, 'outdoor', TRUE),   
+(12, 13, 200, 3.33, 'outdoor', TRUE), 
+(13, 14, 200, 3.33, 'outdoor', TRUE),   
+
+(7, 15, 100, 1.67, 'corridor', TRUE),   
+(15, 21, 100, 1.67, 'corridor', TRUE),  
+(21, 22, 50, 0.83, 'corridor', TRUE),   
+(22, 23, 100, 1.67, 'outdoor', TRUE), 
+
+(16, 24, 10, 0.17, 'corridor', TRUE),    
+(16, 25, 50, 0.83, 'corridor', TRUE),    
+(25, 26, 200, 3.33, 'corridor', TRUE),   
+(25, 27, 50, 0.83, 'corridor', TRUE),    
+(27, 28, 100, 1.67, 'corridor', TRUE),   
+(25, 29, 50, 0.83, 'corridor', TRUE),    
+(29, 30, 150, 2.50, 'corridor', TRUE);
+
+-- (16, 35, 100, 1.67, 'stairs', TRUE),      
+-- (35, 36, 50, 0.83, 'corridor', TRUE),     
+-- (35, 37, 50, 0.83, 'corridor', TRUE),     
+-- (37, 38, 100, 1.67, 'corridor', TRUE),    
+-- (37, 39, 50, 0.83, 'corridor', TRUE),     
+-- (35, 40, 10, 0.17, 'corridor', TRUE),     
+-- (35, 41, 50, 0.83, 'stairs', TRUE),       
+-- (41, 42, 50, 0.83, 'corridor', TRUE),     
+-- (41, 43, 100, 1.67, 'corridor', TRUE),    
+-- (41, 44, 100, 1.67, 'corridor', TRUE); 
 
 -- Verificar las conexiones creadas
 SELECT 

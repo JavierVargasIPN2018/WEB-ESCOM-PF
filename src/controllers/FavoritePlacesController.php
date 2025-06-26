@@ -7,17 +7,21 @@ const FAVORITES_ROUTE = 'views/favorites/index.php';
 class FavoritePlacesController
 {
   private $favoritePlaceModel;
+  private $authController;
 
-  public function __construct()
+  public function __construct($authController)
   {
     $this->favoritePlaceModel = new FavoritePlace();
+    $this->authController = $authController;
   }
 
   public function showFavorites($data = [])
   {
     extract($data);
 
-    $userId = $_SESSION['user_id'];
+    $user = $this->authController->getCurrentUser();
+    $userId = $user['id'];
+
     $searchName = $_GET['search'] ?? '';
     $placeType = $_GET['type'] ?? '';
 
@@ -33,7 +37,9 @@ class FavoritePlacesController
   public function checkFavorite()
   {
 
-    $userId = $_SESSION['user_id'];
+    $user = $this->authController->getCurrentUser();
+    $userId = $user['id'];
+
     $placeId = $_GET['place_id'] ?? '';
 
     if (empty($placeId)) {
@@ -51,7 +57,11 @@ class FavoritePlacesController
 
   public function getFavorites()
   {
-    $userId = $_SESSION['user_id'];
+
+    $user = $this->authController->getCurrentUser();
+    if (!$user) return null;
+    $userId = $user['id'];
+
 
     $searchName = $_GET['search'] ?? '';
     $placeType = $_GET['type'] ?? '';
@@ -64,8 +74,14 @@ class FavoritePlacesController
 
   public function toggleFavorite()
   {
+    $this->authController->requireAuth();
 
-    $userId = $_SESSION['user_id'];
+    $user = $this->authController->getCurrentUser();
+
+    if (empty($user)) return;
+
+    $userId = $user['id'];
+
     $placeId = $_POST['place_id'] ?? '';
 
     $errors = $this->validateFavorite($placeId);
@@ -94,6 +110,16 @@ class FavoritePlacesController
     }
 
     return $errors;
+  }
+
+  public function countFavoritePlaces()
+  {
+    $user = $this->authController->getCurrentUser();
+    if (!$user) return 0;
+
+    $userId = $user['id'];
+
+    return $this->favoritePlaceModel->countFavoritePlaces($userId);
   }
 
   private function sendJsonResponse($data)
