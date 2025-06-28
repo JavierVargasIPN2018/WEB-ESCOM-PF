@@ -29,7 +29,7 @@ class FavoritePlace
   public function getFavoritePlaces($userId)
   {
     $sql = "SELECT * FROM favorite_places WHERE user_id = ?";
-    return $this->db->fetchAll($sql, [$userId]);
+    return $this->db->fetchAll($sql, [$userId]) ?? [];
   }
 
   /**
@@ -80,8 +80,7 @@ class FavoritePlace
     }
 
     $sql .= " ORDER BY p.name ASC";
-
-    return $this->db->fetchAll($sql, $params);
+    return $this->db->fetchAll($sql, $params) ?? [];
   }
 
   /**

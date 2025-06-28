@@ -28,10 +28,11 @@ $authMiddleware = new AuthMiddleware();
 
 $authController = new AuthController();
 
-$placeTypesController = new PlaceTypes();
-$placeController = new PlaceController();
-$connectionController = new ConnectionController();
 $favoritePlacesController = new FavoritePlacesController($authController);
+$placeTypesController = new PlaceTypes();
+
+$connectionController = new ConnectionController();
+$placeController = new PlaceController($authController, $connectionController, $favoritePlacesController);
 
 // Get the current URL path
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -60,15 +61,10 @@ $authMiddleware->securityHeaders();
 if (preg_match('#^/lugares/(\d+)$#', $normalizedUri, $matches)) {
   $authMiddleware->csrfProtection();
 
-  $id = (int)$matches[1]; // Capturamos el ID
+  $id = (int)$matches[1];
 
-  $placeController->showPlaceDetail([
-    'placeId' => $id,
-    'authController' => $authController,
-    'connectionController' => $connectionController,
-    'favoritePlacesController' => $favoritePlacesController,
-    'currentPage' => "/lugares"
-  ]);
+  $placeController->showPlaceDetail($id, '/lugares');
+
   return;
 }
 
@@ -125,7 +121,6 @@ switch ($normalizedUri) {
   case '/lugares':
     $placeController->showPlaces([
       'currentPage' => "/lugares",
-      'authController' => $authController,
       'favoritePlacesController' => $favoritePlacesController,
       'connectionController' => $connectionController
     ]);

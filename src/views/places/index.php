@@ -38,7 +38,8 @@ require_once 'components/icons/favorite-icon.php';
                   <img
                     src="<?= htmlspecialchars("/" . $image); ?>"
                     alt="<?= htmlspecialchars($place['name']); ?>"
-                    class="icon-image">
+                    class="icon-image"
+                    onerror="this.onerror=null; this.src='/public/images/placeholder.webp';">
                 <?php else: ?>
                   <img src="/public/images/placeholder.webp" alt="Icono de <?= $place["name"] ?>" class="icon-image">
                 <?php endif; ?>

@@ -9,10 +9,19 @@ const PLACES_ROUTE = 'views/places/index.php';
 class PlaceController
 {
   private $placeModel;
+  private $favoritePlaceModel;
 
-  public function __construct()
+  private $authController;
+  private $connectionController;
+  private $favoritePlacesController;
+
+
+  public function __construct($authController, $connectionController, $favoritePlacesController)
   {
     $this->placeModel = new Place();
+    $this->authController = $authController;
+    $this->connectionController = $connectionController;
+    $this->favoritePlacesController = $favoritePlacesController;
   }
 
   public function showPlaces($data = [])
@@ -22,7 +31,7 @@ class PlaceController
     $places = $this->placeModel->getAllPlaces();
     $success = $_GET['success'] ?? '';
 
-    $userFavoritePlaces = $favoritePlacesController->getFavorites() ?? [];
+    $userFavoritePlaces = $this->favoritePlacesController->getFavorites() ?? [];
 
     $favPlaceIds = array_column($userFavoritePlaces, 'place_id');
 
@@ -86,9 +95,11 @@ class PlaceController
     }
   }
 
-  public function showPlaceDetail($params)
+  public function showPlaceDetail($placeId, $currentPage)
   {
-    extract($params);
+
+    $searchName = $_GET['search'] ?? '';
+    $placeType = $_GET['type'] ?? '';
 
     if (!is_numeric($placeId)) {
       header('HTTP/1.1 404 Not Found');
@@ -108,10 +119,11 @@ class PlaceController
 
       $path = $connectionController->getPath($placeId);
       $connections = $connectionController->getConnectionsForPath($path);
+
       $relatedPlaces = $this->getRelatedPlaces($place["id"]);
 
-      $userFavoritePlaces = $favoritePlacesController->getFavorites() ?? [];
-      $favPlaceIds = array_column($userFavoritePlaces, 'place_id')  ;
+      $userFavoritePlaces = $favoritePlacesController->getFavorites();
+      $favPlaceIds = array_column($userFavoritePlaces, 'place_id');
 
       $placeId = $place['id'];
       $isFavorite = in_array($placeId, $favPlaceIds);

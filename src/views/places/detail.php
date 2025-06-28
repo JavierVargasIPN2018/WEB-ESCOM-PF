@@ -45,7 +45,8 @@ foreach ($connections as $path) {
             <img
               src="<?= htmlspecialchars("/" . $image); ?>"
               alt="<?= htmlspecialchars($place['name']); ?>"
-              class="place-image">
+              class="place-image"
+              onerror="this.onerror=null; this.src='../../public/images/placeholder.webp';">
           <?php else: ?>
             <img id="place-image" src="../../public/images/placeholder.webp" alt="Imagen del lugar" class="place-image">
           <?php endif; ?>
