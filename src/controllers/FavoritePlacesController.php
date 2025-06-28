@@ -68,7 +68,7 @@ class FavoritePlacesController
 
     $favorites = $this->favoritePlaceModel->getFavoritePlaces($userId) ?? [];
 
-    return $favorites;
+    return $favorites ?? [];
   }
 
 

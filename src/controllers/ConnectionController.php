@@ -22,7 +22,7 @@ class ConnectionController
   {
     $graph = [];
     $connections = $this->connectionModel->getAllActive();
-
+    
     foreach ($connections as $conn) {
       $from = $conn['from_place_id'];
       $to = $conn['to_place_id'];
@@ -33,8 +33,9 @@ class ConnectionController
         $graph[$to][$from] = $dist;
       }
     }
-
+    echo json_encode($graph);
     $path = dijkstra($graph, 1, $placeId);
+    
     $this->connections = $connections;
 
     return $path;

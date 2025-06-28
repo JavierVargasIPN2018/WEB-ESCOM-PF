@@ -22,7 +22,7 @@ class PlaceController
     $places = $this->placeModel->getAllPlaces();
     $success = $_GET['success'] ?? '';
 
-    $userFavoritePlaces = $favoritePlacesController->getFavorites();
+    $userFavoritePlaces = $favoritePlacesController->getFavorites() ?? [];
 
     $favPlaceIds = array_column($userFavoritePlaces, 'place_id');
 
@@ -108,11 +108,11 @@ class PlaceController
 
       $path = $connectionController->getPath($placeId);
       $connections = $connectionController->getConnectionsForPath($path);
-
+      echo json_encode($path);
       $relatedPlaces = $this->getRelatedPlaces($place["id"]);
 
-      $userFavoritePlaces = $favoritePlacesController->getFavorites();
-      $favPlaceIds = array_column($userFavoritePlaces, 'place_id');
+      $userFavoritePlaces = $favoritePlacesController->getFavorites() ?? [];
+      $favPlaceIds = array_column($userFavoritePlaces, 'place_id')  ;
 
       $placeId = $place['id'];
       $isFavorite = in_array($placeId, $favPlaceIds);
