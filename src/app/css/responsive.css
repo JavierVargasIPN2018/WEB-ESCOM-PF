@@ -1,0 +1,168 @@
+/* RESPONSIVE STYLES */
+@media (max-width: 768px) {
+    /* GENERAL ADJUSTMENTS */
+    .main-content {
+      padding: 1.5rem;
+    }
+  
+    .main-header {
+      padding: 1.2rem 1.5rem;
+    }
+  
+    .main-header h1 {
+      font-size: 1.8rem;
+    }
+  
+    /* INDEX PAGE */
+    .explorer-grid {
+      grid-template-columns: 1fr;
+      height: auto;
+      gap: 2rem;
+    }
+  
+    .map-section {
+      height: 300px;
+    }
+  
+    .search-panel {
+      padding: 2rem;
+    }
+  
+    .search-panel h2 {
+      font-size: 1.6rem;
+    }
+  
+    /* CATEGORIAS PAGE */
+    .categories-grid {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1.5rem;
+    }
+  
+    .category-icon {
+      width: 70px;
+      height: 70px;
+    }
+  
+    .category-card h3 {
+      font-size: 1.1rem;
+    }
+  
+    .categories-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+    }
+  
+    /* DETALLE PAGE */
+    .place-image-container {
+      height: 250px;
+    }
+  
+    .place-info,
+    .route-info {
+      padding: 2rem;
+    }
+  
+    .place-info h2 {
+      font-size: 1.7rem;
+    }
+  
+    .place-description h3,
+    .route-info h3 {
+      font-size: 1.4rem;
+    }
+  }
+  
+  /* SMALL MOBILE DEVICES */
+  @media (max-width: 480px) {
+    .main-header {
+      padding: 1rem 1.2rem;
+    }
+  
+    .main-header h1 {
+      font-size: 1.5rem;
+    }
+  
+    .main-content {
+      padding: 1.2rem;
+    }
+  
+    .categories-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+  
+    .category-card a {
+      padding: 1.5rem 1rem;
+    }
+  
+    .category-icon {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1rem;
+    }
+  
+    .search-form {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  
+    .search-button {
+      width: 100%;
+    }
+  
+    .place-info h2 {
+      font-size: 1.5rem;
+    }
+  
+    .place-category {
+      font-size: 0.9rem;
+    }
+  
+    .place-image-container {
+      height: 200px;
+    }
+  
+    .place-info,
+    .route-info {
+      padding: 1.5rem;
+    }
+  }
+  
+  /* ANIMATIONS */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .category-card,
+  .place-detail,
+  .map-section,
+  .search-section {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  .categories-grid .category-card:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .categories-grid .category-card:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .categories-grid .category-card:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .categories-grid .category-card:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .categories-grid .category-card:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+  .categories-grid .category-card:nth-child(6) {
+    animation-delay: 0.6s;
+  }
+  

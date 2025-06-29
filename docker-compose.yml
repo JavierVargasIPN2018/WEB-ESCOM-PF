@@ -1,0 +1,26 @@
+services:
+  web:
+    build: .
+    container_name: web_apache_php
+    ports:
+      - "8888:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./docker-setup.sh:/docker-setup.sh
+    depends_on:
+      - db
+    entrypoint: ["/bin/bash", "/docker-setup.sh"]
+
+  db:
+    image: mariadb:11.3
+    container_name: web_mariadb_db
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpass
+      MARIADB_DATABASE: testdb
+      MARIADB_USER: user
+      MARIADB_PASSWORD: userpass
+    volumes:
+      - ./scripts/db.sql:/docker-entrypoint-initdb.d/db.sql
+    ports:
+      - "3306:3306"
