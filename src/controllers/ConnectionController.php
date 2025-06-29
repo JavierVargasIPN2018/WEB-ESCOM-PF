@@ -33,7 +33,6 @@ class ConnectionController
         $graph[$to][$from] = $dist;
       }
     }
-    echo json_encode($graph);
     $path = dijkstra($graph, 1, $placeId);
     
     $this->connections = $connections;

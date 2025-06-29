@@ -108,7 +108,6 @@ class PlaceController
 
       $path = $connectionController->getPath($placeId);
       $connections = $connectionController->getConnectionsForPath($path);
-      echo json_encode($path);
       $relatedPlaces = $this->getRelatedPlaces($place["id"]);
 
       $userFavoritePlaces = $favoritePlacesController->getFavorites() ?? [];
