@@ -3,7 +3,7 @@ services:
     build: .
     container_name: web_apache_php
     ports:
-      - "8888:80"
+      - "3015:80"
     volumes:
       - ./src:/var/www/html
       - ./docker-setup.sh:/docker-setup.sh
